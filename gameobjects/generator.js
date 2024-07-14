@@ -1,7 +1,7 @@
 export default class Generator{
     constructor(scene){
         this.scene = scene;
-        this.scene.time.delayedCall(Phaser.Math.Between(20, 200),() => this.init(),null,this);
+        this.scene.time.delayedCall(20,() => this.init(),null,this);
        // this.pinos = 0;
     }
 
@@ -33,7 +33,7 @@ class Cloud extends Phaser.GameObjects.Rectangle{
     init(){
         this.scene.tweens.add({
             targets : this,
-            x: {from: 20000, to: -100},
+            x: {from: 18000, to: -100},
             duration : 10000,
             onComplete: () => {
                 this.destroy();
