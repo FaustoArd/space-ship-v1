@@ -5,7 +5,7 @@ import Splash from './scenes/splash';
 import Game from './scenes/game';
 
 const config = {
-    width: 1000,
+    width: 1200,
     height : 800,
     scale: {
         mode: Phaser.Scale.FIT,
