@@ -33,7 +33,7 @@ export default class Bootloader extends Phaser.Scene {
         this.load.image("landscape", "assets/images/landscape.png");
         this.load.audio("shoot", "assets/sounds/shoot.mp3");
         this.load.image("platform","assets/images/platform1.png");
-        this.load.image("background1","assets/images/background1.png");
+       
 
         this.load.spritesheet("star", "assets/images/star.png", {
             frameWidth: 64,
@@ -46,6 +46,23 @@ export default class Bootloader extends Phaser.Scene {
         });
 
         this.registry.set("score", 0);
+
+        this.load.spritesheet("ship"," assets/images/space_ship.png",{
+            frameWidth: 64,
+            frameHeight: 64,
+        });
+
+        this.load.spritesheet("bigtank"," assets/images/bigtank.png",{
+            frameWidth: 64,
+            frameHeight: 96,
+        });
+
+
+
+
+        // Array(4).fill(0).forEach((_, i) => {
+        //     this.load.spritesheet(`bigtank${i+1}` ,`assets/images/bigtank${i+1}`);
+        // })
 
         // Array(2)
         // .fill(0)

@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import Player from "../gameobjects/player";
 import Generator from '../gameobjects/generator';
 import FoeGenerator from '../gameobjects/foegenerator';
+import BigTank from '../gameobjects/bigtank';
 
 const gameOptions = {
     platformStartSpeed: 0,
@@ -13,10 +14,16 @@ const gameOptions = {
     jumps: 2
 }
 
+const bigTankPositions =[1000,1700,2800];
+
 export default class Game extends Phaser.Scene {
+
+    bigTankEnabled = false;
+
     constructor() {
         super({ key: "game" });
         this.player = null;
+        this.bigTank= null;
         this.score = 0;
         this.scoreText = null;
         this.stars;
@@ -41,6 +48,8 @@ export default class Game extends Phaser.Scene {
         this.physics.world.setBounds(0, 0, 20920 * 2, 20080 * 2);
       // this.createMap();
         this.addPlayer();
+        this.addEnemy();
+
         this.cameras.main.startFollow(this.player, true, 0.05, 0.05
             , 0, 240);
         this.physics.world.enable([this.player]);
@@ -59,7 +68,7 @@ export default class Game extends Phaser.Scene {
             });
 
             this.addPlatform(20000, this.width );
-            this.addFoes();
+           // this.addFoes();
             this.addColliders();
 
         // this.platforms = this.physics.add.staticGroup();
@@ -103,11 +112,18 @@ export default class Game extends Phaser.Scene {
         this.player = new Player(this, this.center_width, this.center_height, 0);
     }
 
+    addEnemy(){
+        this.bigTank = new BigTank(this,1500,580);
+       
+      
+    }
+
     update() {
         this.recyclePlatform();
         this.player.update();
-        this.foes.update();
+        //this.foes.update();
         if (this.number === 3 && this.player.y > 1500) this.restartScene();
+        this.bigTankEnabled = this.bigTank.update(this.bigTankEnabled,this.player.x);
        
     }
 
@@ -163,7 +179,7 @@ export default class Game extends Phaser.Scene {
         this.physics.add.collider(
             this.player,
             this.platformGroup,
-            this.foeGroup,
+           
            ()=> {
             return true;
            },
