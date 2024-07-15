@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import Player from "../gameobjects/player";
 import Generator from '../gameobjects/generator';
+import FoeGenerator from '../gameobjects/foegenerator';
 
 const gameOptions = {
     platformStartSpeed: 0,
@@ -44,7 +45,7 @@ export default class Game extends Phaser.Scene {
             , 0, 240);
         this.physics.world.enable([this.player]);
         this.generator = new Generator(this);
-        this.addColliders();
+       
         this.platformGroup = this.add.group({
             removeCallback: function(platform){
                 platform.scene.platformPool.add(platform)
@@ -58,6 +59,8 @@ export default class Game extends Phaser.Scene {
             });
 
             this.addPlatform(20000, this.width );
+            this.addFoes();
+            this.addColliders();
 
         // this.platforms = this.physics.add.staticGroup();
         // this.platforms.create(600, 702, 'platform1')
@@ -66,6 +69,12 @@ export default class Game extends Phaser.Scene {
        // this.backgrounds.create(850,555,'background1');
      
 
+    }
+    addFoes(){
+        this.foeGroup = this.add.group();
+        this.foeWaveGroup = this.add.group();
+        this.foes = new FoeGenerator(this);
+        
     }
 
     addPlatform(platformWidth, posX){
@@ -96,9 +105,10 @@ export default class Game extends Phaser.Scene {
 
     update() {
         this.recyclePlatform();
-    
         this.player.update();
+        this.foes.update();
         if (this.number === 3 && this.player.y > 1500) this.restartScene();
+       
     }
 
     recyclePlatform(){
@@ -152,9 +162,16 @@ export default class Game extends Phaser.Scene {
     addColliders(){
         this.physics.add.collider(
             this.player,
-            this.backgrounds,
-           
-        )
+            this.platformGroup,
+            this.foeGroup,
+           ()=> {
+            return true;
+           },
+           this
+        );
+
+       
+       
     }
 
 

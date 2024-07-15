@@ -21,6 +21,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
         this.invincible = false;
         this.health = health;
         this.dead = false;
+       this.body.setCollideWorldBounds(true);
         this.body.setAllowGravity(false);
 
         this.W = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
