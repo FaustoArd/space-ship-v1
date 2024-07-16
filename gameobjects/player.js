@@ -1,3 +1,5 @@
+import ShootingPatterns from '../gameobjects/shootingpatterns';
+
 export default class Player extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y, health = 10) {
         super(scene, x, y, "ship");
@@ -23,7 +25,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
         this.dead = false;
        this.body.setCollideWorldBounds(true);
         this.body.setAllowGravity(false);
-
+        this.ShootingPatterns = new ShootingPatterns(this.scene,'player1')
         this.W = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         this.A = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         this.S = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
@@ -95,6 +97,14 @@ export default class Player extends Phaser.GameObjects.Sprite {
         } else {
             this.anims.play("playermove", true);
         }
+
+        if(Phaser.Input.Keyboard.JustDown(this.cursors.space)){
+            this.shoot();
+        }
+    }
+
+    shoot(){
+        this.ShootingPatterns.shoot(this.x+30, this.y ,'laser');
     }
 
 }

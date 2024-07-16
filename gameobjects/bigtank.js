@@ -8,7 +8,7 @@ export default class BigTank extends Phaser.Physics.Arcade.Sprite{
         this.scene.physics.world.enable(this);
         this.body.setAllowGravity(false);
         this.scene.add.existing(this);
-      
+        this.body.setCollideWorldBounds(true);
 
         this.init();
 
@@ -58,6 +58,12 @@ export default class BigTank extends Phaser.Physics.Arcade.Sprite{
             }
                
         }
+        
+    }
+
+    destroy(){
+        this.dead = true;
+        this.body.enable = false;
     }
 
 

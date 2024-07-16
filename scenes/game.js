@@ -14,7 +14,7 @@ const gameOptions = {
     jumps: 2
 }
 
-const bigTankPositions =[1000,1700,2800];
+const bigTankPositions = [1000, 1700, 2800];
 
 export default class Game extends Phaser.Scene {
 
@@ -23,7 +23,7 @@ export default class Game extends Phaser.Scene {
     constructor() {
         super({ key: "game" });
         this.player = null;
-        this.bigTank= null;
+        this.bigTank = null;
         this.score = 0;
         this.scoreText = null;
         this.stars;
@@ -46,58 +46,55 @@ export default class Game extends Phaser.Scene {
         this.add.tileSprite(0, 0, 683 * 10, 768, "landscape").setOrigin(0.5);
         this.cameras.main.setBounds(0, 0, 20920 * 2, 20080 * 2);
         this.physics.world.setBounds(0, 0, 20920 * 2, 20080 * 2);
-      // this.createMap();
+        this.lights.enable();
+        this.lights.setAmbientColor(0x666666);
+        // this.createMap();
         this.addPlayer();
         this.addEnemy();
-
+        this.addShots();
         this.cameras.main.startFollow(this.player, true, 0.05, 0.05
             , 0, 240);
         this.physics.world.enable([this.player]);
+      
         this.generator = new Generator(this);
-       
+
         this.platformGroup = this.add.group({
-            removeCallback: function(platform){
+            removeCallback: function (platform) {
                 platform.scene.platformPool.add(platform)
             }
         });
         this.platformPool = this.add.group({
-            
-                removeCallback: function(platform){
-                    platform.scene.platformGroup.add(platform);
-                }
-            });
 
-            this.addPlatform(20000, this.width );
-           // this.addFoes();
-            this.addColliders();
+            removeCallback: function (platform) {
+                platform.scene.platformGroup.add(platform);
+            }
+        });
 
-        // this.platforms = this.physics.add.staticGroup();
-        // this.platforms.create(600, 702, 'platform1')
-        // .setScale(3.12).refreshBody();
-       // this.backgrounds= this.physics.add.staticGroup();
-       // this.backgrounds.create(850,555,'background1');
-     
+        this.addPlatform(20000, this.width);
+        // this.addFoes();
+        this.addColliders();
+}
+  
 
-    }
-    addFoes(){
+    addFoes() {
         this.foeGroup = this.add.group();
         this.foeWaveGroup = this.add.group();
         this.foes = new FoeGenerator(this);
-        
+
     }
 
-    addPlatform(platformWidth, posX){
+    addPlatform(platformWidth, posX) {
         let platform;
-        if(this.platformPool.getLength()){
+        if (this.platformPool.getLength()) {
             platform = this.platformPool.getFirst();
             platform.x = posX;
             platform.active = true;
             platform.visible = true;
-           
-           
+
+
             this.platformPool.remove(platform);
         }
-        else{
+        else {
             platform = this.physics.add.sprite(posX, this.height * 0.8, "platform");
             platform.setImmovable(true);
             platform.setVelocityX(gameOptions.platformStartSpeed);
@@ -112,10 +109,15 @@ export default class Game extends Phaser.Scene {
         this.player = new Player(this, this.center_width, this.center_height, 0);
     }
 
-    addEnemy(){
-        this.bigTank = new BigTank(this,1500,580);
-       
-      
+    addEnemy() {
+        this.bigTank = new BigTank(this, 1500, 580);
+
+
+    }
+
+    addShots() {
+        this.shotsLayer = this.add.layer();
+        this.shots = this.add.group();
     }
 
     update() {
@@ -123,23 +125,23 @@ export default class Game extends Phaser.Scene {
         this.player.update();
         //this.foes.update();
         if (this.number === 3 && this.player.y > 1500) this.restartScene();
-        this.bigTankEnabled = this.bigTank.update(this.bigTankEnabled,this.player.x);
-       
+        this.bigTankEnabled = this.bigTank.update(this.bigTankEnabled, this.player.x);
+
     }
 
-    recyclePlatform(){
+    recyclePlatform() {
         let minDistance = this.width;
-        this.platformGroup.getChildren().forEach(function(platform){
+        this.platformGroup.getChildren().forEach(function (platform) {
             let platformDistance = this.width - platform.x - platform.displayWidth / 2;
             minDistance = Math.min(minDistance, platformDistance);
-            if(platform.x < - platform.displayWidth / 2){
+            if (platform.x < - platform.displayWidth / 2) {
                 this.platformGroup.killAndHide(platform);
                 this.platformGroup.remove(platform);
             }
         }, this);
- 
+
         // adding new platforms
-        if(minDistance > this.nextPlatformDistance){
+        if (minDistance > this.nextPlatformDistance) {
             var nextPlatformWidth = Phaser.Math.Between(gameOptions.platformSizeRange[0], gameOptions.platformSizeRange[1]);
             this.addPlatform(nextPlatformWidth, this.width + nextPlatformWidth / 2);
         }
@@ -147,47 +149,96 @@ export default class Game extends Phaser.Scene {
 
     restartScene() {
         this.time.delayedCall(
-          1000,
-          () => {
-          
-            this.scene.start("game", { name: "STAGE", number: this.number });
-          },
-          null,
-          this
+            1000,
+            () => {
+
+                this.scene.start("game", { name: "STAGE", number: this.number });
+            },
+            null,
+            this
         );
-      }
+    }
 
     createMap() {
-       
-         this.tileMap = this.make.tilemap({
-             key: "scene" + this.number,
-             tileWidth: 64,
-             tileHeight: 64,
-         });
-       // console.log(this.tileMap);
+
+        this.tileMap = this.make.tilemap({
+            key: "scene" + this.number,
+            tileWidth: 64,
+            tileHeight: 64,
+        });
+        // console.log(this.tileMap);
         // this.platform = this.tileMap.createLayer(
         //     "scene" + this.number,
         //     this.tileSet
         // );
-       // this.tileSetBg = this.tileMap.addTilesetImage("background");
-       
+        // this.tileSetBg = this.tileMap.addTilesetImage("background");
+
         //this.tileMap.createLayer("background", this.tileSetBg);
-     
+
     }
 
-    addColliders(){
+    addColliders() {
+        this.physics.add.collider(
+ this.player,
+             this.bigTank,
+          
+
+
+            () => {
+                return true;
+            },
+            this
+        );
         this.physics.add.collider(
             this.player,
-            this.platformGroup,
-           
-           ()=> {
-            return true;
-           },
-           this
+             this.platformGroup,
+          
+
+
+            () => {
+                return true;
+            },
+            this
         );
 
-       
-       
+        this.physics.add.overlap(
+            this.shots,
+           
+            this.bigTank,
+            this.shootBigTanksuccesfull,
+
+            () => {
+                return true;
+            },
+            this
+        );
+        this.physics.add.overlap(
+            this.shots,
+            this.platformGroup,
+            this.shotPlatformSuccesfull,
+
+            () => {
+                return true;
+            },
+            this
+        );
+        this.physics.world.on("worldbounds", this.onWorldBounds);
+    }
+
+    shotPlatformSuccesfull(){
+        console.log("shot platform!!");
+    }
+
+    shootBigTanksuccesfull(){
+        console.log("shot bigtank!!");
+    }
+
+    onWorldBounds(body, t) {
+        const name = body.gameObject.name.toString();
+        if (["foeshot", "shot"].includes(name)) {
+            body.gameObject.shadow.destroy();
+            body.gameObject.destroy();
+        }
     }
 
 

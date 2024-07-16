@@ -1,3 +1,5 @@
+import Shot from '../gameobjects/shot';
+
 export default class ShootingPatterns{
     constructor(scene,name){
         this.scene = scene;

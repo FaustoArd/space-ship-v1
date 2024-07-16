@@ -1,5 +1,5 @@
 const TYPES = {
-    laser: {color: 0xffffff, radius: 16, intensity: 0.4 },
+    laser: {color: 0xffffff, radius: 3, intensity: 0.4 },
 }
 
 export default class Shot extends Phaser.GameObjects.PointLight{
@@ -8,7 +8,7 @@ export default class Shot extends Phaser.GameObjects.PointLight{
         super(scene,x,y,color,radius,intensity);
         this.name = "shot";
         this.playerName = playerName;
-        scene.add.existing(this);
+        scene.add.existing(this); 
         scene.physics.add.existing(this);
         this.body.setAllowGravity(false);
         this.body.setVelocityX(velocityX);
@@ -38,4 +38,6 @@ export default class Shot extends Phaser.GameObjects.PointLight{
           repeat: -1,
         });
       }
+
+     
 }
