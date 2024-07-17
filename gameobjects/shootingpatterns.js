@@ -9,11 +9,11 @@ export default class ShootingPatterns{
         }
     }
 
-    shoot(x,y,type){
-        this.shootingMethods[type](x,y, type);
+    shoot(x,y,type,playerTurnY){
+        this.shootingMethods[type](x,y, type,playerTurnY);
     }
 
-    single(x, y, type){
-        this.scene.shots.add(new Shot(this.scene, x, y, type, this.name));
+    single(x, y, type,playerTurnY){
+        this.scene.shots.add(new Shot(this.scene, x, y, type, this.name,500,playerTurnY));
     }
 }

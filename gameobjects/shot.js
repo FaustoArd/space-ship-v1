@@ -3,7 +3,7 @@ const TYPES = {
 }
 
 export default class Shot extends Phaser.GameObjects.PointLight{
-    constructor(scene, x, y, type = "laser", playerName, velocityX = 0, velocityY = 500 ){
+    constructor(scene, x, y, type = "laser", playerName, velocityX, velocityY){
         const { color, radius, intensity } = TYPES[type];
         super(scene,x,y,color,radius,intensity);
         this.name = "shot";
@@ -12,7 +12,8 @@ export default class Shot extends Phaser.GameObjects.PointLight{
         scene.physics.add.existing(this);
         this.body.setAllowGravity(false);
         this.body.setVelocityX(velocityX);
-        this.body.setVelocity(velocityY);
+
+        this.body.setVelocityY(velocityY);
         this.body.setCircle(10);
         this.body.setOffset(6,9);
         this.body.setCollideWorldBounds(true);

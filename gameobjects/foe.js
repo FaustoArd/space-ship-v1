@@ -3,18 +3,22 @@ import Explosion from './explosion';
 const TYPES = {
     star: { points: 400,lives: 1}
 }
-export default class Foe extends Phaser.GameObjects.Sprite{
+export default class Foe extends Phaser.Physics.Arcade.Sprite{
    constructor(scene, x, y, name= "star", velocityX = 0, velocityY = 0){
     super(scene, x, y, name);
     this.name = name;
     this.scene = scene;
     //this.points = TYPES[name].points;
     //this.lievs = TYPES[name].lives;
+    this.scene.add.existing(this);
+    this.scene.physics.add.existing(this);
     this.id = Math.random();
    this.spawnShadow(x,y);
-   this.scene.add.existing(this);
-   this.scene.physics.add.existing(this);
-   this.body.setAllowGravity(false);
+   this.body.setGravity(2000);
+   this.body.setGravityX(0);
+   this.body.setGravityY(0)
+  
+   this.body.setAllowGravity(true);
    this.body.setCircle(19);
     this.body.setOffset(12, 12);
     this.body.setVelocityX(velocityX);
