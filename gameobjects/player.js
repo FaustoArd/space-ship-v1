@@ -60,7 +60,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
             repeat: -1,
         });
         this.scene.anims.create({
-            key: "playerdown",
+            key: "playerup",
             frames: this.scene.anims.generateFrameNumbers("ship", {
                 start: 1,
                 end: 1,
@@ -69,10 +69,55 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
             repeat: -1,
         });
         this.scene.anims.create({
-            key: "playerup",
+            key: "playerdown",
             frames: this.scene.anims.generateFrameNumbers("ship", {
                 start: 2,
                 end: 2,
+            }),
+            frameRate: 3,
+            repeat: -1,
+        });
+        this.scene.anims.create({
+            key: "playeridleleft",
+            frames: this.scene.anims.generateFrameNumbers("ship", {
+                start: 3,
+                end: 3,
+            }),
+            frameRate: 3,
+            repeat: -1,
+        });
+        this.scene.anims.create({
+            key: "playermoveleft",
+            frames: this.scene.anims.generateFrameNumbers("ship", {
+                start: 3,
+                end: 3,
+            }),
+            frameRate: 3,
+            repeat: -1,
+        });
+        this.scene.anims.create({
+            key: "playerupleft",
+            frames: this.scene.anims.generateFrameNumbers("ship", {
+                start: 4,
+                end: 4,
+            }),
+            frameRate: 3,
+            repeat: -1,
+        });
+        this.scene.anims.create({
+            key: "playerdownleft",
+            frames: this.scene.anims.generateFrameNumbers("ship", {
+                start: 5,
+                end: 5,
+            }),
+            frameRate: 3,
+            repeat: -1,
+        });
+        this.scene.anims.create({
+            key: "playerexplosion",
+            frames: this.scene.anims.generateFrameNumbers("ship", {
+                start: 6,
+                end: 9,
             }),
             frameRate: 3,
             repeat: -1,
