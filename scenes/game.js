@@ -21,6 +21,7 @@ export default class Game extends Phaser.Scene {
 
     bigTankEnabled = false;
     bigTankDestroyed = false;
+    playerDead= false;
 
     constructor() {
         super({ key: "game" });
@@ -129,6 +130,7 @@ export default class Game extends Phaser.Scene {
     }
 
     update() {
+        if(this.playerDead) return;
         this.recyclePlatform();
         this.player.update();
         //this.foes.update();
@@ -170,10 +172,10 @@ export default class Game extends Phaser.Scene {
 
 
     addColliders() {
-        this.physics.add.collider(
+        this.physics.add.overlap(
             this.player,
             this.bigTank,
-
+            this.playerExplode,
 
 
             () => {
@@ -184,7 +186,7 @@ export default class Game extends Phaser.Scene {
         this.physics.add.collider(
             this.player,
             this.platformGroup,
-
+            this.playerExplode,
 
 
             () => {
@@ -192,10 +194,22 @@ export default class Game extends Phaser.Scene {
             },
             this
         );
-        this.physics.add.collider(
+        // this.physics.add.overlap(
+        //     this.player,
+        //     this.platformGroup,
+        //     this.playerExplode,
+
+
+        //     () => {
+        //         return true;
+        //     },
+        //     this
+        // );
+
+        this.physics.add.overlap(
             this.player,
             this.foe,
-
+            this.playerExplode,
 
 
             () => {
@@ -235,6 +249,12 @@ export default class Game extends Phaser.Scene {
             this
         );
         this.physics.world.on("worldbounds", this.onWorldBounds);
+    }
+
+    playerExplode(){
+        console.log("player explode")
+        this.player.explode();
+        this.playerDead = true;
     }
 
     shotPlatformSuccesfull() {

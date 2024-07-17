@@ -1,5 +1,5 @@
 import ShootingPatterns from '../gameobjects/shootingpatterns';
-
+import Explosion from "./explosion";
 
 
 export default class Player extends Phaser.Physics.Arcade.Sprite {
@@ -7,8 +7,12 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     playerYTurnDown = 300;
     playerTurnUp = false;
     playerTurnDown = false;
+    playerLeftTurnUp = false;
+    playerLeftTurnDown = false;
     constructor(scene, x, y, health = 10) {
         super(scene, x, y, "ship");
+
+
         this.setOrigin(0.5);
 
         this.scene.add.existing(this);
@@ -18,7 +22,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
             Phaser.Input.Keyboard.KeyCodes.DOWN
         );
         this.right = true;
-        this.body.setGravity(1);
+        this.body.setGravity(0);
         this.body.setSize(42, 24);
         this.init();
         this.jumping = false;
@@ -120,39 +124,58 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
                 end: 9,
             }),
             frameRate: 3,
-            repeat: -1,
+            repeat: 0,
         });
 
     }
 
     update() {
+       // if (this.death) return;
+
         this.playerTurnUp = false;
         this.playerTurnDown = false;
         this.velocityX = this.walkVelocity;
-        if (this.cursors.up.isDown) {
+        if(this.cursor.shift.isDown){
+            this.body.setVelocityX(0);
+        }
+        if(this.cursors.right.isDown){
+            this.right = true;
+            //this.flipX = this.body.velocity.x < 0;
+            this.body.setVelocityX(this.walkVelocity);
+            this.anims.play("playermove")
+        }else if(this.cursors.left.isDown){
+            this.right = false;
+            //this.flipX = this.body.velocity.x < 0;
+            this.body.setVelocityX(-this.walkVelocity);
+            this.anims.play("playermoveleft")
+        }else if(this.cursors.up.isDown&&this.right){
             this.anims.play("playerup", true);
             this.y -= 1.8;
+            this.body.setVelocityX(this.walkVelocity);
             this.playerTurnUp = true;
             this.playerTurnDown = false;
-
-        } else if (this.cursors.down.isDown) {
+        }else if(this.cursors.up.isDown&&!this.right){
+            this.anims.play("playerupleft", true);
+            this.y -= 1.8;
+            this.body.setVelocityX(-this.walkVelocity);
+            this.playerTurnUp = false;
+            this.playerTurnDown = false;
+            this.playerLeftTurnUp = true;
+            this.playerLeftTurnDown = false;
+        }else if(this.cursors.down.isDown&&this.right){
             this.anims.play("playerdown", true);
             this.y += 1.8;
             this.playerTurnUp = false;
             this.playerTurnDown = true;
-
-        }
-        else if (this.cursors.right.isDown) {
-            this.right = true;
-            this.flipX = this.body.velocity.x < 0;
-            this.body.setVelocityX(this.walkVelocity);
-            this.anims.play("playermove")
-
-        } else if (this.cursors.left.isDown) {
-            this.anims.play("playermove", true);
-            this.body.setVelocityX(0);
-        } else {
-            this.anims.play("playermove", true);
+            this.playerLeftTurnUp = false;
+            this.playerLeftTurnDown = false;
+        }else if(this.cursors.down.isDown&&!this.right){
+            this.anims.play("playerdownleft", true);
+            this.y += 1.8;
+            this.playerTurnUp = false;
+            this.playerTurnDown = false;
+            this.playerLeftTurnUp = false;
+            this.playerLeftTurnDown = true;
         }
 
         if (Phaser.Input.Keyboard.JustDown(this.cursors.space)) {
@@ -166,12 +189,42 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
     shoot() {
         if (this.playerTurnUp)  {
-            this.ShootingPatterns.shoot(this.x + 30, this.y-20, 'laser', this.playerYTurnUp);
+            this.ShootingPatterns.shoot(this.x + 30, this.y-20, 'laser', this.playerYTurnUp,this.right);
+            
         } else if (this.playerTurnDown) {
-            this.ShootingPatterns.shoot(this.x + 30, this.y+10, 'laser', this.playerYTurnDown);
+            this.ShootingPatterns.shoot(this.x + 30, this.y+10, 'laser', this.playerYTurnDown,this.right);
         } else {
-            this.ShootingPatterns.shoot(this.x + 30, this.y-10, 'laser', 0);
+            this.ShootingPatterns.shoot(this.x + 30, this.y-10, 'laser', 0,this.right);
         }
+
+    }
+
+    destroy() {
+        this.dead = true;
+        this.body.enable = false;
+       
+    }
+
+    explode() {
+        let radius = 100;
+        let explosionRad = 100;
+        const explosion = this.scene.add.circle(this.x, this.y, 5)
+            .setStrokeStyle(20, 0x563b14);
+        //this.showPoints(this.points);
+        this.scene.tweens.add({
+            targets: explosion,
+            radius: { from: 10, to: radius },
+            alpha: { from: 1, to: 0.3 },
+            duration: 550,
+            onComplete: () => {
+                explosion.destroy();
+            },
+        });
+        this.anims.play("playerexplosion", true);
+        new Explosion(this.scene, this.x, this.y, explosionRad);
+        
+        this.destroy();
+
 
     }
 

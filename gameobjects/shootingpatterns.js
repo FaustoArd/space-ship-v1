@@ -9,11 +9,17 @@ export default class ShootingPatterns{
         }
     }
 
-    shoot(x,y,type,playerTurnY){
-        this.shootingMethods[type](x,y, type,playerTurnY);
+    shoot(x,y,type,playerTurnY,playerLeft){
+        
+        this.shootingMethods[type](x,y, type,playerTurnY,playerLeft);
     }
 
-    single(x, y, type,playerTurnY){
-        this.scene.shots.add(new Shot(this.scene, x, y, type, this.name,500,playerTurnY));
+    single(x, y, type,playerTurnY,playerLeft){
+        console.log("SIngle: ", playerLeft)
+        if(playerLeft){
+            this.scene.shots.add(new Shot(this.scene, x, y, type, this.name,500,playerTurnY));
+        }else{
+        this.scene.shots.add(new Shot(this.scene, x, y, type, this.name,-500,playerTurnY));
+        }
     }
 }
