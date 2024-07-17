@@ -103,6 +103,10 @@ export default class Player extends Phaser.GameObjects.Sprite {
         }
     }
 
+    getPlayerX(){
+        return this.x;
+    }
+
     shoot(){
         this.ShootingPatterns.shoot(this.x+30, this.y ,'laser');
     }
