@@ -1,4 +1,4 @@
-import Foe from "./foe";
+import Star from "./star";
 import BigTank from "./bigtank";
 
 export default class FoeGenerator{
@@ -31,15 +31,13 @@ export default class FoeGenerator{
     }
 
     bigTank(){
-      this.scene.foeGroup.add(
-        new BigTank(this.scene,Phaser.Math.Between(1000,20000), 560)
-      );
+      const bigTank =  new BigTank(this.scene,Phaser.Math.Between(1000,20000), 560);
+      this.scene.foeGroup.add(bigTank);
     }
 
     star(){
-        this.scene.foeGroup.add(
-          new Foe(this.scene, Phaser.Math.Between(1000, 20000), Phaser.Math.Between(200, 550), "star", 0, 0)
-        );
+      const star = new Star(this.scene, Phaser.Math.Between(1000, 20000), Phaser.Math.Between(200, 500), "star", 0, 0);
+        this.scene.foeGroup.add(star );
     }
     add() {
       const foe = new Foe( this.scene, Phaser.Math.Between(32, this.scene.width - 32),);
@@ -60,31 +58,40 @@ export default class FoeGenerator{
 
     
 
-      update() {
-        if (this.path) {
-          this.path.draw(this.graphics);
-    
-          this.scene.foeWaveGroup.children.entries.forEach((foe) => {
-            if (foe === null || !foe.active) return;
-            let t = foe.z;
-            let vec = foe.getData("vector");
-            this.path.getPoint(t, vec);
-            foe.setPosition(vec.x, vec.y);
-            foe.shadow.setPosition(vec.x + 20, vec.y + 20);
-            foe.setDepth(foe.y);
+      update(bigTankEnabled,playerX,playerY) {
+      
+          this.scene.foeGroup.children.entries.forEach((foe) =>{
+           if(foe.name==="star"){
+         foe.update();
+           }
+           if(foe.name==="bigtank"){
+           return foe.update(bigTankEnabled,playerX,playerY);
+           }
+
           });
     
-          if (this.activeWave && this.checkIfWaveDestroyed()) {
-            this.activeWave = false;
-            this.scene.spawnShake();
-            this.path.destroy();
-          }
-        }
-        this.scene.foeGroup.children.entries.forEach((foe) => {
-          if (foe === null || !foe.active || foe.y > this.scene.width /2)
-            //foe.destroy();
-          foe.update();
-        });
+        
+        
+        // this.scene.foeGroup.children.entries.forEach((foe) => {
+        //   if (foe === null || !foe.active || foe.y > this.scene.width /2)
+        //     //foe.destroy();
+        //   foe.update();
+        // });
       }
       
 }
+  // this.scene.foeWaveGroup.children.entries.forEach((foe) => {
+          //   if (foe === null || !foe.active) return;
+          //   let t = foe.z;
+          //   let vec = foe.getData("vector");
+          //   this.path.getPoint(t, vec);
+          //   foe.setPosition(vec.x, vec.y);
+          //   foe.shadow.setPosition(vec.x + 20, vec.y + 20);
+          //   foe.setDepth(foe.y);
+          // });
+    
+          // if (this.activeWave && this.checkIfWaveDestroyed()) {
+          //   this.activeWave = false;
+          //   this.scene.spawnShake();
+          //   this.path.destroy();
+          // }

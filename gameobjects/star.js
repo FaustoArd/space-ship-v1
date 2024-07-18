@@ -3,7 +3,7 @@ import Explosion from './explosion';
 const TYPES = {
     star: { points: 400,lives: 1}
 }
-export default class Foe extends Phaser.Physics.Arcade.Sprite{
+export default class Star extends Phaser.Physics.Arcade.Sprite{
    constructor(scene, x, y, name= "star", velocityX = 0, velocityY = 0){
     super(scene, x, y, name);
     this.name = name;
@@ -45,7 +45,7 @@ export default class Foe extends Phaser.Physics.Arcade.Sprite{
         key: "star",
         frames: this.scene.anims.generateFrameNumbers("star",{
             start:0,
-            end:2,
+            end:0,
         }),
         frameRate:3,
         repeat: -1,
@@ -53,7 +53,7 @@ export default class Foe extends Phaser.Physics.Arcade.Sprite{
     this.scene.anims.create({
         key: "stardestroy",
         frames: this.scene.anims.generateFrameNumbers("star",{
-            start:3,
+            start:1,
             end:3,
         }),
         frameRate:3,
@@ -73,7 +73,7 @@ export default class Foe extends Phaser.Physics.Arcade.Sprite{
    }
 
    update(){
-    
+    console.log("Star update!!!");
    // this.anims.play("star", true);
     // this.shadow.destroy();
     // this.destroy();

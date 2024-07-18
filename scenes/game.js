@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import Player from "../gameobjects/player";
 import Generator from '../gameobjects/generator';
 import FoeGenerator from '../gameobjects/foegenerator';
-import Foe from '../gameobjects/foe';
+import Foe from '../gameobjects/star';
 import BigTank from '../gameobjects/bigtank';
 
 
@@ -22,12 +22,12 @@ export default class Game extends Phaser.Scene {
 
     bigTankEnabled = false;
     bigTankDestroyed = false;
-    playerDead= false;
+    playerDead = false;
 
     constructor() {
         super({ key: "game" });
         this.player = null;
-       // this.bigTank = null;
+        // this.bigTank = null;
         this.foe = null;
         this.score = 0;
         this.scoreText = null;
@@ -54,12 +54,8 @@ export default class Game extends Phaser.Scene {
         this.lights.enable();
         this.lights.setAmbientColor(0x666666);
         this.bigTankEnabled = false;
-        // this.createMap();
         this.addPlayer();
-       // this.addBigTank();
-      
         this.addShots();
-       // this.addStar();
         this.addStars();
         this.cameras.main.startFollow(this.player, true, 0.05, 0.05
             , 0, 240);
@@ -80,12 +76,12 @@ export default class Game extends Phaser.Scene {
         });
 
         this.addPlatform(20000, this.width);
-         //this.addFoes();
+        //this.addFoes();
         this.addColliders();
-       
-       
+
+
     }
- addPlatform(platformWidth, posX) {
+    addPlatform(platformWidth, posX) {
         let platform;
         if (this.platformPool.getLength()) {
             platform = this.platformPool.getFirst();
@@ -111,18 +107,6 @@ export default class Game extends Phaser.Scene {
         this.player = new Player(this, this.center_width, this.center_height, 0);
     }
 
-    addBigTank() {
-        this.bigTank = new BigTank(this, 1500, 580);
-
-
-    }
-   
-
-    addStar(){
-        this.foe = new Foe(this,this.player.getPlayerX()+500,350);
-    }
-
-
     addStars() {
         this.foeGroup = this.add.group();
         this.foeWaveGroup = this.add.group();
@@ -130,7 +114,7 @@ export default class Game extends Phaser.Scene {
 
     }
 
-   
+
 
     addShots() {
         this.shotsLayer = this.add.layer();
@@ -138,12 +122,13 @@ export default class Game extends Phaser.Scene {
     }
 
     update() {
-    
-        if(this.playerDead) return;
+
+        if (this.playerDead) return;
         this.recyclePlatform();
         this.player.update();
-      // this.foe.update();
-       // if (this.number === 3 && this.player.y > 1500) this.restartScene();
+      // this.bigTankEnabled =  this.foes.update(this.bigTankEnabled,this.player.getPlayerX(),this.player.getPlayerY());
+        // this.foe.update();
+        // if (this.number === 3 && this.player.y > 1500) this.restartScene();
         //this.bigTankEnabled = this.bigTank.update(this.bigTankEnabled, this.player.x);
 
     }
@@ -237,6 +222,7 @@ export default class Game extends Phaser.Scene {
             },
             this
         );
+
         this.physics.add.overlap(
             this.shots,
             this.platformGroup,
@@ -247,6 +233,7 @@ export default class Game extends Phaser.Scene {
             },
             this
         );
+
         this.physics.add.overlap(
             this.shots,
             this.foeGroup,
@@ -260,15 +247,14 @@ export default class Game extends Phaser.Scene {
         this.physics.world.on("worldbounds", this.onWorldBounds);
     }
 
-    playerExplode(){
-        console.log("player explode")
+    playerExplode() {
+        console.log("player explode");
         this.player.explode();
         this.playerDead = true;
     }
 
     shotPlatformSuccesfull(foe) {
-      foe.destroy();
-
+        foe.destroy();
     }
 
     shootBigTanksuccesfull(shot, bigTank) {
@@ -276,24 +262,35 @@ export default class Game extends Phaser.Scene {
         const point = this.lights.addPointLight(shot.x, shot.y, 0xffffff, 10, 0.7);
         bigTank.explode();
         shot.destroy();
-
-
     }
 
-    shotStarSuccessfull(shot,foe){
+    shotStarSuccessfull(shot, foe) {
         console.log("shot star!!!")
-       foe.explode();
-       shot.destroy();
+        foe.explode();
+        shot.destroy();
 
     }
 
     onWorldBounds(body, t) {
         const name = body.gameObject.name.toString();
         if (["foeshot", "shot"].includes(name)) {
-           // body.gameObject.shadow.destroy();
+            // body.gameObject.shadow.destroy();
             body.gameObject.destroy();
         }
     }
+
+    // addBigTank() {
+    //     this.bigTank = new BigTank(this, 1500, 580);
+
+
+    // }
+
+
+    // addStar(){
+    //     this.foe = new Foe(this,this.player.getPlayerX()+500,350);
+    // }
+
+
 
 
 }

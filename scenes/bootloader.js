@@ -40,21 +40,26 @@ export default class Bootloader extends Phaser.Scene {
             frameHeight: 64,
         });
 
-        this.load.spritesheet("ship"," assets/images/space_ship.png",{
+        this.load.spritesheet("ship","assets/images/space_ship.png",{
             frameWidth: 64,
             frameHeight: 64,
         });
 
         this.registry.set("score", 0);
 
-        this.load.spritesheet("ship"," assets/images/space_ship.png",{
+        this.load.spritesheet("ship","assets/images/space_ship.png",{
             frameWidth: 64,
             frameHeight: 64,
         });
 
-        this.load.spritesheet("bigtank"," assets/images/bigtank.png",{
+        this.load.spritesheet("bigtank","assets/images/bigtank.png",{
             frameWidth: 64,
             frameHeight: 96,
+        });
+
+        this.load.spritesheet("bigtank_missile","assets/images/bigtank_missile.png",{
+            frameWidth:8,
+            frameHeight:16,
         });
 
 

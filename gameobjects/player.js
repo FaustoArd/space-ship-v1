@@ -130,6 +130,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     update() {
+        this.bigTankEnabled =  this.scene.foes.update(this.bigTankEnabled,this);
         // if (this.death) return;
         this.playerTurnUp = false;
         this.playerTurnDown = false;
@@ -183,6 +184,9 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
     getPlayerX() {
         return this.x;
+    }
+    getPlayerY() {
+        return this.y;
     }
 
     shoot() {

@@ -1,4 +1,5 @@
 import Explosion from "./explosion";
+import BigTankMissile from './bigtankmissile';
 
 export default class BigTank extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y) {
@@ -11,7 +12,7 @@ export default class BigTank extends Phaser.Physics.Arcade.Sprite {
         this.body.setAllowGravity(false);
         this.scene.add.existing(this);
         this.body.setCollideWorldBounds(true);
-
+        this.bigTankMissile;
         this.init();
 
     }
@@ -60,13 +61,16 @@ export default class BigTank extends Phaser.Physics.Arcade.Sprite {
 
     }
 
-    update(bigTankEnabled, playerX) {
+    update(bigTankEnabled,player) {
+       
        if(this.dead)return;
         if (bigTankEnabled) {
             this.anims.play("bigtankFullopen", true);
+            
             return false;
         } else {
-            if (this.x - playerX < 400 ) {
+            if (this.x - player.x < 400 ) {
+                this.shootMissile(player);
                 this.anims.play("bigtankopen", true);
                 return true;
             }
@@ -75,6 +79,17 @@ export default class BigTank extends Phaser.Physics.Arcade.Sprite {
         }
 
 
+    }
+
+    shootMissile(player){
+        console.log("Missile Shoot")
+        if(this.bigTankMissile){
+           this.bigTankMissile.update(this.scene,this,player);
+        }else{
+            this.bigTankMissile  =  new BigTankMissile(this.scene,this.x-10,this.y-50,"bigtank_missile");
+        }
+   
+    
     }
     destroy() {
         this.dead = true;
