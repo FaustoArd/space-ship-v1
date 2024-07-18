@@ -12,7 +12,7 @@ export default class FoeGenerator{
 
     generate(){
         this.generateEvent1 = this.scene.time.addEvent({
-            delay: 150,
+            delay: 750,
             callback: () => this.star(),
             callbackScope : this,
             loop:true,
@@ -23,6 +23,10 @@ export default class FoeGenerator{
         this.scene.foeGroup.add(
           new Foe(this.scene, Phaser.Math.Between(1000, 20000), Phaser.Math.Between(200, 550), "star", 0, 0)
         );
+    }
+    add() {
+      const foe = new Foe( this.scene, Phaser.Math.Between(32, this.scene.width - 32),);
+      this.scene.foeGroup.add(foe);
     }
 
     stop() {
@@ -37,14 +41,7 @@ export default class FoeGenerator{
         this.generateEvent1.destroy();
       }
 
-      add() {
-        const foe = new Foe(
-          this.scene,
-          Phaser.Math.Between(32, this.scene.width - 32),
-          0
-        );
-        this.scene.foeGroup.add(foe);
-      }
+    
 
       update() {
         if (this.path) {

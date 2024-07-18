@@ -130,9 +130,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     update() {
-       
-       // if (this.death) return;
-
+        // if (this.death) return;
         this.playerTurnUp = false;
         this.playerTurnDown = false;
         this.velocityX = this.walkVelocity;
@@ -178,7 +176,6 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
             this.playerLeftTurnUp = false;
             this.playerLeftTurnDown = true;
         }
-
         if (Phaser.Input.Keyboard.JustDown(this.cursors.space)) {
             this.shoot();
         }

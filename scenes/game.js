@@ -57,7 +57,8 @@ export default class Game extends Phaser.Scene {
         this.addPlayer();
         this.addEnemy();
         this.addShots();
-        this.addStar();
+       // this.addStar();
+        this.addFoes();
         this.cameras.main.startFollow(this.player, true, 0.05, 0.05
             , 0, 240);
         this.physics.world.enable([this.player]);
@@ -210,7 +211,7 @@ export default class Game extends Phaser.Scene {
 
         this.physics.add.overlap(
             this.player,
-            this.foe,
+            this.foeGroup,
             this.playerExplode,
 
 
@@ -242,7 +243,7 @@ export default class Game extends Phaser.Scene {
         );
         this.physics.add.overlap(
             this.shots,
-            this.foe,
+            this.foeGroup,
             this.shotStarSuccessfull,
 
             () => {
@@ -275,7 +276,7 @@ export default class Game extends Phaser.Scene {
 
     shotStarSuccessfull(shot,foe){
         console.log("shot star!!!")
-       this.foe.explode();
+       foe.explode();
        shot.destroy();
 
     }

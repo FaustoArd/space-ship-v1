@@ -99,7 +99,6 @@ export default class Foe extends Phaser.Physics.Arcade.Sprite{
             explosion.destroy();
         },
     });
-
     new Explosion(this.scene, this.x, this.y, explosionRad);
     this.anims.play("blackhole", true);
    // this.destroy();
