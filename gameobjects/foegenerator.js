@@ -1,22 +1,39 @@
 import Foe from "./foe";
+import BigTank from "./bigtank";
 
 export default class FoeGenerator{
     constructor(scene){
         this.scene= scene;
         this.waveFoes = [];
-        this.generate();
+        this.generateStars();
+        this.generateBigTanks();
         this.activeWave = false;
         this.waves = 0;
       
     }
 
-    generate(){
+    generateStars(){
         this.generateEvent1 = this.scene.time.addEvent({
             delay: 750,
             callback: () => this.star(),
             callbackScope : this,
             loop:true,
-        })
+        });
+    }
+
+    generateBigTanks(){
+      this.generateEvent2 = this.scene.time.addEvent({
+        delay:750,
+        callback: () => this.bigTank(),
+        callbackScope: this,
+        loop:true,
+      });
+    }
+
+    bigTank(){
+      this.scene.foeGroup.add(
+        new BigTank(this.scene,Phaser.Math.Between(1000,20000), 560)
+      );
     }
 
     star(){

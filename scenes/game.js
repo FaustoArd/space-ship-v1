@@ -27,7 +27,7 @@ export default class Game extends Phaser.Scene {
     constructor() {
         super({ key: "game" });
         this.player = null;
-        this.bigTank = null;
+       // this.bigTank = null;
         this.foe = null;
         this.score = 0;
         this.scoreText = null;
@@ -56,7 +56,7 @@ export default class Game extends Phaser.Scene {
         this.bigTankEnabled = false;
         // this.createMap();
         this.addPlayer();
-        this.addBigTank();
+       // this.addBigTank();
       
         this.addShots();
        // this.addStar();
@@ -144,7 +144,7 @@ export default class Game extends Phaser.Scene {
         this.player.update();
       // this.foe.update();
        // if (this.number === 3 && this.player.y > 1500) this.restartScene();
-        this.bigTankEnabled = this.bigTank.update(this.bigTankEnabled, this.player.x);
+        //this.bigTankEnabled = this.bigTank.update(this.bigTankEnabled, this.player.x);
 
     }
 
