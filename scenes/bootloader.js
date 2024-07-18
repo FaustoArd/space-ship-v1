@@ -67,7 +67,14 @@ export default class Bootloader extends Phaser.Scene {
             frameHeight: 32,
         });
 
+        this.load.bitmapFont(
+            "wendy",
+            "assets/fonts/wendy.png",
+            "assets/fonts/wendy.xml"
 
+        );
+
+        this.setRegistry();
 
 
         // Array(4).fill(0).forEach((_, i) => {
@@ -79,6 +86,10 @@ export default class Bootloader extends Phaser.Scene {
         // .forEach((_, i) => {
         //   this.load.tilemapTiledJSON(`scene${i}`, `assets/maps/scene${i}.json`);
         // });
+    }
+
+    setRegistry(){
+        this.registry.set("score_player", 0);
     }
 
     createBars() {

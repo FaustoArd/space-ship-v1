@@ -10,12 +10,12 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     playerTurnDown = false;
     playerLeftTurnUp = false;
     playerLeftTurnDown = false;
-    constructor(scene, x, y, health = 10) {
+    constructor(scene, x, y,name="player", health = 10) {
         super(scene, x, y, "ship");
 
 
         this.setOrigin(0.5);
-
+        this.name= name;
         this.scene.add.existing(this);
         this.scene.physics.add.existing(this);
         this.cursor = this.scene.input.keyboard.createCursorKeys();

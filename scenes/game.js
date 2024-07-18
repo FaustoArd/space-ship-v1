@@ -58,6 +58,7 @@ export default class Game extends Phaser.Scene {
         this.addStars();
         this.addBigTankMissiles();
         this.addFlares();
+        this.addScores();
         this.cameras.main.startFollow(this.player, true, 0.05, 0.05
             , 0, 240);
         this.physics.world.enable([this.player]);
@@ -75,8 +76,8 @@ export default class Game extends Phaser.Scene {
                 platform.scene.platformGroup.add(platform);
             }
         });
-         this.addPlatform(20000, this.width);
-       this.addColliders();
+        this.addPlatform(20000, this.width);
+        this.addColliders();
 
 
     }
@@ -101,16 +102,16 @@ export default class Game extends Phaser.Scene {
         platform.displayWidth = platformWidth;
         this.nextPlatformDistance = Phaser.Math.Between(gameOptions.spawnRange[0], gameOptions.spawnRange[1]);
     }
- addPlayer() {
+    addPlayer() {
         this.player = new Player(this, this.center_width, this.center_height, 0);
     }
-addStars() {
+    addStars() {
         this.foeGroup = this.add.group();
         this.foeWaveGroup = this.add.group();
         this.foes = new FoeGenerator(this);
-}
+    }
 
-addShots() {
+    addShots() {
         this.shotsLayer = this.add.layer();
         this.shots = this.add.group();
     }
@@ -119,7 +120,7 @@ addShots() {
         this.bigTankMissileGroup = this.add.group();
     }
 
-    addFlares(){
+    addFlares() {
         this.flareGroup = this.add.group();
     }
 
@@ -128,10 +129,7 @@ addShots() {
         if (this.playerDead) return;
         this.recyclePlatform();
         this.player.update();
-        // this.bigTankEnabled =  this.foes.update(this.bigTankEnabled,this.player.getPlayerX(),this.player.getPlayerY());
-        // this.foe.update();
-        // if (this.number === 3 && this.player.y > 1500) this.restartScene();
-        //this.bigTankEnabled = this.bigTank.update(this.bigTankEnabled, this.player.x);
+
 
     }
 
@@ -185,17 +183,6 @@ addShots() {
             },
             this
         );
-        // this.physics.add.overlap(
-        //     this.player,
-        //     this.platformGroup,
-        //     this.playerExplode,
-
-
-        //     () => {
-        //         return true;
-        //     },
-        //     this
-        // );
 
         this.physics.add.overlap(
             this.player,
@@ -277,12 +264,12 @@ addShots() {
             },
             this
         );
-        
+
 
         this.physics.world.on("worldbounds", this.onWorldBounds);
     }
 
-    flareMissileExplode(bigtank_missile,flare){
+    flareMissileExplode(bigtank_missile, flare) {
         bigtank_missile.explode();
     }
 
@@ -298,11 +285,12 @@ addShots() {
     }
 
     starMissileExplode(foe, bigtank_missile) {
-        if(foe.name==='star'){
+        if (foe.name === 'star') {
             foe.explode();
             bigtank_missile.explode();
+           
         }
-       
+
     }
 
     missileExplode(bigtank_missile) {
@@ -325,7 +313,33 @@ addShots() {
         console.log("shot star!!!")
         foe.explode();
         shot.destroy();
+        this.updateScore("player",foe.points);
 
+    }
+
+    addScores() {
+        this.scores = {
+            player: {},
+        };
+        this.scores['player']["scoreText"] = this.add.bitmapText(150, 16, "wendy", String(this.registry.get("score_player"))
+            .padStart(6, "0"), 50).setOrigin(0.5).setScrollFactor(0);
+
+
+    }
+
+    updateScore(playerName, points = 0) {
+        const score = +this.registry.get("score_" + playerName) + points;
+        this.registry.set("score_" + playerName, score);
+        this.scores["player"]["scoreText"].setText(String(score).padStart(6, "0")
+        );
+
+        this.tweens.add({
+            targets: this.scores["player"]["scoreText"],
+            duration: 200,
+            tint: {from: 0x000ff, to: 0xffffff},
+            scale: {from: 1.2, to: 1},
+            repeat: 2,
+        });
     }
 
     onWorldBounds(body, t) {
@@ -336,16 +350,7 @@ addShots() {
         }
     }
 
-    // addBigTank() {
-    //     this.bigTank = new BigTank(this, 1500, 580);
 
-
-    // }
-
-
-    // addStar(){
-    //     this.foe = new Foe(this,this.player.getPlayerX()+500,350);
-    // }
 
 
 

@@ -3,6 +3,7 @@ import BigTankMissile from './bigtankmissile';
 
 
 export default class BigTank extends Phaser.Physics.Arcade.Sprite {
+    animsCreated= false;
     constructor(scene, x, y) {
         super(scene, x, y, "bigtank");
         this.name = "bigtank";
@@ -19,6 +20,7 @@ export default class BigTank extends Phaser.Physics.Arcade.Sprite {
     }
 
     init() {
+        if(this.animsCreated)return;
         this.scene.anims.create({
             key: "bigtankidle",
             frames: this.scene.anims.generateFrameNumbers("bigtank", {
@@ -58,7 +60,7 @@ export default class BigTank extends Phaser.Physics.Arcade.Sprite {
             frameRate: 5,
             repeat: 0
         });
-
+        this.animsCreated = true;
 
     }
 
@@ -83,7 +85,7 @@ export default class BigTank extends Phaser.Physics.Arcade.Sprite {
     }
 
     shootMissile(player){
-        console.log("Missile Shoot")
+      
         if(this.bigTankMissile){
            this.bigTankMissile.update(this.scene,this,player);
         }else{
