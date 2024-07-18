@@ -13,11 +13,11 @@ export default class Foe extends Phaser.Physics.Arcade.Sprite{
     this.scene.add.existing(this);
     this.scene.physics.add.existing(this);
     this.id = Math.random();
-   this.spawnShadow(x,y);
+  // this.spawnShadow(x,y);
    this.body.setGravity(2000);
    this.body.setGravityX(0);
    this.body.setGravityY(0)
-  
+   this.rotation += 0.01;
    this.body.setAllowGravity(true);
    this.body.setCircle(19);
     this.body.setOffset(12, 12);
@@ -73,6 +73,7 @@ export default class Foe extends Phaser.Physics.Arcade.Sprite{
    }
 
    update(){
+    
    // this.anims.play("star", true);
     // this.shadow.destroy();
     // this.destroy();

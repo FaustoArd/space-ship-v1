@@ -52,6 +52,7 @@ export default class Game extends Phaser.Scene {
         this.physics.world.setBounds(0, 0, 20920 * 2, 20080 * 2);
         this.lights.enable();
         this.lights.setAmbientColor(0x666666);
+        this.bigTankEnabled = false;
         // this.createMap();
         this.addPlayer();
         this.addEnemy();
@@ -130,11 +131,12 @@ export default class Game extends Phaser.Scene {
     }
 
     update() {
+    
         if(this.playerDead) return;
         this.recyclePlatform();
         this.player.update();
-        //this.foes.update();
-        if (this.number === 3 && this.player.y > 1500) this.restartScene();
+      // this.foe.update();
+       // if (this.number === 3 && this.player.y > 1500) this.restartScene();
         this.bigTankEnabled = this.bigTank.update(this.bigTankEnabled, this.player.x);
 
     }
@@ -257,14 +259,16 @@ export default class Game extends Phaser.Scene {
         this.playerDead = true;
     }
 
-    shotPlatformSuccesfull() {
-       
+    shotPlatformSuccesfull(foe) {
+      foe.destroy();
+
     }
 
     shootBigTanksuccesfull(shot, bigTank) {
         this.bigTankEnabled = false;
         const point = this.lights.addPointLight(shot.x, shot.y, 0xffffff, 10, 0.7);
         bigTank.explode();
+        shot.destroy();
 
 
     }
@@ -272,12 +276,14 @@ export default class Game extends Phaser.Scene {
     shotStarSuccessfull(shot,foe){
         console.log("shot star!!!")
        this.foe.explode();
+       shot.destroy();
+
     }
 
     onWorldBounds(body, t) {
         const name = body.gameObject.name.toString();
         if (["foeshot", "shot"].includes(name)) {
-            body.gameObject.shadow.destroy();
+           // body.gameObject.shadow.destroy();
             body.gameObject.destroy();
         }
     }

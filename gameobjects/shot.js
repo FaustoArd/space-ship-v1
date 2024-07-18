@@ -18,7 +18,7 @@ export default class Shot extends Phaser.GameObjects.PointLight{
         this.body.setOffset(6,9);
         this.body.setCollideWorldBounds(true);
         this.body.onWorldBounds = true;
-        this.spawnShadow(x, y, velocityX, velocityY);
+       // this.spawnShadow(x, y, velocityX, velocityY);
         this.init();
     }
     spawnShadow(x, y, velocityX, velocityY) {

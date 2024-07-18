@@ -54,21 +54,23 @@ export default class BigTank extends Phaser.Physics.Arcade.Sprite {
             }),
 
             frameRate: 5,
-            repeat: -1
+            repeat: 0
         });
 
 
     }
 
     update(bigTankEnabled, playerX) {
+       if(this.dead)return;
         if (bigTankEnabled) {
             this.anims.play("bigtankFullopen", true);
             return false;
         } else {
-            if (this.x - playerX < 400 && bigTankEnabled) {
+            if (this.x - playerX < 400 ) {
                 this.anims.play("bigtankopen", true);
                 return true;
             }
+            return false;
 
         }
 

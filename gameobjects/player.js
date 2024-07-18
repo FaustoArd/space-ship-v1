@@ -41,7 +41,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this.S = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
         this.D = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         this.cursors = this.scene.input.keyboard.createCursorKeys();
-
+      
     }
 
     init() {
@@ -130,6 +130,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     update() {
+       
        // if (this.death) return;
 
         this.playerTurnUp = false;
@@ -196,6 +197,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         } else {
             this.ShootingPatterns.shoot(this.x + 30, this.y-10, 'laser', 0,this.right);
         }
+      
 
     }
 
