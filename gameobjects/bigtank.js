@@ -5,7 +5,7 @@ export default class BigTank extends Phaser.Physics.Arcade.Sprite {
         super(scene, x, y, "bigtank");
         this.name = "bigtank";
         this.scene = scene;
-
+        this.id = Math.random();
         this.scene.physics.add.existing(this);
         this.scene.physics.world.enable(this);
         this.body.setAllowGravity(false);

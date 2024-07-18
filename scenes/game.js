@@ -5,6 +5,7 @@ import FoeGenerator from '../gameobjects/foegenerator';
 import Foe from '../gameobjects/foe';
 import BigTank from '../gameobjects/bigtank';
 
+
 const gameOptions = {
     platformStartSpeed: 0,
     spawnRange: [100, 350],
@@ -55,10 +56,11 @@ export default class Game extends Phaser.Scene {
         this.bigTankEnabled = false;
         // this.createMap();
         this.addPlayer();
-        this.addEnemy();
+        this.addBigTank();
+      
         this.addShots();
        // this.addStar();
-        this.addFoes();
+        this.addStars();
         this.cameras.main.startFollow(this.player, true, 0.05, 0.05
             , 0, 240);
         this.physics.world.enable([this.player]);
@@ -80,6 +82,7 @@ export default class Game extends Phaser.Scene {
         this.addPlatform(20000, this.width);
          //this.addFoes();
         this.addColliders();
+       
        
     }
  addPlatform(platformWidth, posX) {
@@ -108,23 +111,26 @@ export default class Game extends Phaser.Scene {
         this.player = new Player(this, this.center_width, this.center_height, 0);
     }
 
-    addEnemy() {
+    addBigTank() {
         this.bigTank = new BigTank(this, 1500, 580);
 
 
     }
+   
 
     addStar(){
         this.foe = new Foe(this,this.player.getPlayerX()+500,350);
     }
 
 
-    addFoes() {
+    addStars() {
         this.foeGroup = this.add.group();
         this.foeWaveGroup = this.add.group();
         this.foes = new FoeGenerator(this);
 
     }
+
+   
 
     addShots() {
         this.shotsLayer = this.add.layer();
