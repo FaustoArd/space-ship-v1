@@ -1,5 +1,6 @@
 import ShootingPatterns from '../gameobjects/shootingpatterns';
 import Explosion from "./explosion";
+import Flare from "./flare";
 
 
 export default class Player extends Phaser.Physics.Arcade.Sprite {
@@ -40,6 +41,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this.A = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         this.S = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
         this.D = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+        this.C = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.C);
         this.cursors = this.scene.input.keyboard.createCursorKeys();
       
     }
@@ -180,6 +182,15 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         if (Phaser.Input.Keyboard.JustDown(this.cursors.space)) {
             this.shoot();
         }
+        if(Phaser.Input.Keyboard.JustDown(this.C)){
+            this.fireFlare();
+        }
+    }
+
+    fireFlare(){
+        const flare = new Flare(this.scene,this.x-10,this.y+20)
+        this.scene.flareGroup.add(flare);
+        
     }
 
     getPlayerX() {

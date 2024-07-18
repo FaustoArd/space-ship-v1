@@ -35,7 +35,8 @@ export default class BigTankMissile extends Phaser.Physics.Arcade.Sprite {
     }
 
     enemyFollows(scene,enemy,player){
-        scene.physics.moveToObject(this, player, 120);
+        scene.physics.moveToObject(this, player, 250);
+        this.rotation += 0.5;
     }
 
     destroy() {

@@ -24,42 +24,47 @@ export default class Bootloader extends Phaser.Scene {
         this.load.on(
             "complete",
             () => {
-              this.scene.start("splash");
+                this.scene.start("splash");
             },
             this
-          );
+        );
 
         this.load.audio("music1", "assets/sounds/music1.mp3");
         this.load.image("landscape", "assets/images/landscape.png");
         this.load.audio("shoot", "assets/sounds/shoot.mp3");
-        this.load.image("platform","assets/images/platform1.png");
-       
+        this.load.image("platform", "assets/images/platform1.png");
+
 
         this.load.spritesheet("star", "assets/images/star.png", {
             frameWidth: 64,
             frameHeight: 64,
         });
 
-        this.load.spritesheet("ship","assets/images/space_ship.png",{
+        this.load.spritesheet("ship", "assets/images/space_ship.png", {
             frameWidth: 64,
             frameHeight: 64,
         });
 
         this.registry.set("score", 0);
 
-        this.load.spritesheet("ship","assets/images/space_ship.png",{
+        this.load.spritesheet("ship", "assets/images/space_ship.png", {
             frameWidth: 64,
             frameHeight: 64,
         });
 
-        this.load.spritesheet("bigtank","assets/images/bigtank.png",{
+        this.load.spritesheet("bigtank", "assets/images/bigtank.png", {
             frameWidth: 64,
             frameHeight: 96,
         });
 
-        this.load.spritesheet("bigtank_missile","assets/images/bigtank_missile.png",{
-            frameWidth:8,
-            frameHeight:16,
+        this.load.spritesheet("bigtank_missile", "assets/images/bigtank_missile.png", {
+            frameWidth: 8,
+            frameHeight: 16,
+        });
+
+        this.load.spritesheet("flare", "assets/images/flare.png", {
+            frameWidth: 32,
+            frameHeight: 32,
         });
 
 

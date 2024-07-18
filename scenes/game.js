@@ -2,9 +2,7 @@ import Phaser from 'phaser';
 import Player from "../gameobjects/player";
 import Generator from '../gameobjects/generator';
 import FoeGenerator from '../gameobjects/foegenerator';
-import Foe from '../gameobjects/star';
-import BigTank from '../gameobjects/bigtank';
-import BigTankMissile from '../gameobjects/bigtankmissile';
+
 
 
 const gameOptions = {
@@ -59,6 +57,7 @@ export default class Game extends Phaser.Scene {
         this.addShots();
         this.addStars();
         this.addBigTankMissiles();
+        this.addFlares();
         this.cameras.main.startFollow(this.player, true, 0.05, 0.05
             , 0, 240);
         this.physics.world.enable([this.player]);
@@ -102,27 +101,26 @@ export default class Game extends Phaser.Scene {
         platform.displayWidth = platformWidth;
         this.nextPlatformDistance = Phaser.Math.Between(gameOptions.spawnRange[0], gameOptions.spawnRange[1]);
     }
-
-    addPlayer() {
+ addPlayer() {
         this.player = new Player(this, this.center_width, this.center_height, 0);
     }
-
-    addStars() {
+addStars() {
         this.foeGroup = this.add.group();
         this.foeWaveGroup = this.add.group();
         this.foes = new FoeGenerator(this);
+}
 
-    }
-
-
-
-    addShots() {
+addShots() {
         this.shotsLayer = this.add.layer();
         this.shots = this.add.group();
     }
 
     addBigTankMissiles() {
         this.bigTankMissileGroup = this.add.group();
+    }
+
+    addFlares(){
+        this.flareGroup = this.add.group();
     }
 
     update() {
@@ -259,7 +257,33 @@ export default class Game extends Phaser.Scene {
             },
             this
         );
+        this.physics.add.overlap(
+            this.bigTankMissileGroup,
+            this.flareGroup,
+            this.flareMissileExplode,
+
+            () => {
+                return true;
+            },
+            this
+        );
+        this.physics.add.overlap(
+            this.player,
+            this.flareGroup,
+            this.playerExplode,
+
+            () => {
+                return true;
+            },
+            this
+        );
+        
+
         this.physics.world.on("worldbounds", this.onWorldBounds);
+    }
+
+    flareMissileExplode(bigtank_missile,flare){
+        bigtank_missile.explode();
     }
 
     playerExplode() {
