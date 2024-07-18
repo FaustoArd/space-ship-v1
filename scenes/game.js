@@ -4,6 +4,7 @@ import Generator from '../gameobjects/generator';
 import FoeGenerator from '../gameobjects/foegenerator';
 import Foe from '../gameobjects/star';
 import BigTank from '../gameobjects/bigtank';
+import BigTankMissile from '../gameobjects/bigtankmissile';
 
 
 const gameOptions = {
@@ -57,6 +58,7 @@ export default class Game extends Phaser.Scene {
         this.addPlayer();
         this.addShots();
         this.addStars();
+        this.addBigTankMissiles();
         this.cameras.main.startFollow(this.player, true, 0.05, 0.05
             , 0, 240);
         this.physics.world.enable([this.player]);
@@ -74,10 +76,8 @@ export default class Game extends Phaser.Scene {
                 platform.scene.platformGroup.add(platform);
             }
         });
-
-        this.addPlatform(20000, this.width);
-        //this.addFoes();
-        this.addColliders();
+         this.addPlatform(20000, this.width);
+       this.addColliders();
 
 
     }
@@ -121,12 +121,16 @@ export default class Game extends Phaser.Scene {
         this.shots = this.add.group();
     }
 
+    addBigTankMissiles() {
+        this.bigTankMissileGroup = this.add.group();
+    }
+
     update() {
 
         if (this.playerDead) return;
         this.recyclePlatform();
         this.player.update();
-      // this.bigTankEnabled =  this.foes.update(this.bigTankEnabled,this.player.getPlayerX(),this.player.getPlayerY());
+        // this.bigTankEnabled =  this.foes.update(this.bigTankEnabled,this.player.getPlayerX(),this.player.getPlayerY());
         // this.foe.update();
         // if (this.number === 3 && this.player.y > 1500) this.restartScene();
         //this.bigTankEnabled = this.bigTank.update(this.bigTankEnabled, this.player.x);
@@ -155,7 +159,6 @@ export default class Game extends Phaser.Scene {
         this.time.delayedCall(
             1000,
             () => {
-
                 this.scene.start("game", { name: "STAGE", number: this.number });
             },
             null,
@@ -170,8 +173,6 @@ export default class Game extends Phaser.Scene {
             this.player,
             this.bigTank,
             this.playerExplode,
-
-
             () => {
                 return true;
             },
@@ -181,8 +182,6 @@ export default class Game extends Phaser.Scene {
             this.player,
             this.platformGroup,
             this.playerExplode,
-
-
             () => {
                 return true;
             },
@@ -204,8 +203,25 @@ export default class Game extends Phaser.Scene {
             this.player,
             this.foeGroup,
             this.playerExplode,
+            () => {
+                return true;
+            },
+            this
+        );
 
-
+        this.physics.add.overlap(
+            this.player,
+            this.bigTankMissileGroup,
+            this.playerMissileExplode,
+            () => {
+                return true;
+            },
+            this
+        );
+        this.physics.add.overlap(
+            this.foeGroup,
+            this.bigTankMissileGroup,
+            this.starMissileExplode,
             () => {
                 return true;
             },
@@ -216,7 +232,6 @@ export default class Game extends Phaser.Scene {
             this.shots,
             this.bigTank,
             this.shootBigTanksuccesfull,
-
             () => {
                 return true;
             },
@@ -251,6 +266,24 @@ export default class Game extends Phaser.Scene {
         console.log("player explode");
         this.player.explode();
         this.playerDead = true;
+    }
+    playerMissileExplode(player, bigtank_missile) {
+        this.player.explode();
+        this.playerDead = true;
+        bigtank_missile.explode();
+    }
+
+    starMissileExplode(foe, bigtank_missile) {
+        if(foe.name==='star'){
+            foe.explode();
+            bigtank_missile.explode();
+        }
+       
+    }
+
+    missileExplode(bigtank_missile) {
+        bigtank_missile.explode();
+
     }
 
     shotPlatformSuccesfull(foe) {

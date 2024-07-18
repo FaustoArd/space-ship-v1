@@ -40,8 +40,8 @@ export default class FoeGenerator{
         this.scene.foeGroup.add(star );
     }
     add() {
-      const foe = new Foe( this.scene, Phaser.Math.Between(32, this.scene.width - 32),);
-      this.scene.foeGroup.add(foe);
+      const star = new Star( this.scene, Phaser.Math.Between(32, this.scene.width - 32),);
+      this.scene.foeGroup.add(star);
     }
 
     stop() {
@@ -58,14 +58,14 @@ export default class FoeGenerator{
 
     
 
-      update(bigTankEnabled,playerX,playerY) {
+      update(bigTankEnabled,player) {
       
           this.scene.foeGroup.children.entries.forEach((foe) =>{
            if(foe.name==="star"){
          foe.update();
            }
            if(foe.name==="bigtank"){
-           return foe.update(bigTankEnabled,playerX,playerY);
+           return foe.update(bigTankEnabled,player);
            }
 
           });

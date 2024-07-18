@@ -1,3 +1,4 @@
+import Explosion from "./explosion";
 
 export default class BigTankMissile extends Phaser.Physics.Arcade.Sprite {
 
@@ -37,5 +38,30 @@ export default class BigTankMissile extends Phaser.Physics.Arcade.Sprite {
         scene.physics.moveToObject(this, player, 120);
     }
 
-    
+    destroy() {
+        this.dead = true;
+        this.body.enable = false;
+    }
+
+    explode() {
+        console.log("bigtank_missile explode!!!")
+        let radius = 100;
+        let explosionRad = 100;
+        const explosion = this.scene.add.circle(this.x, this.y, 5)
+            .setStrokeStyle(20, 0x563b14);
+        //this.showPoints(this.points);
+        this.scene.tweens.add({
+            targets: explosion,
+            radius: { from: 10, to: radius },
+            alpha: { from: 1, to: 0.3 },
+            duration: 550,
+            onComplete: () => {
+                explosion.destroy();
+            },
+        });
+        new Explosion(this.scene, this.x, this.y, explosionRad);
+        this.destroy();
+
+
+    }
 }
