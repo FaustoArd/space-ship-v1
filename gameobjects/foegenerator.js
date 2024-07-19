@@ -31,7 +31,7 @@ export default class FoeGenerator{
     }
 
     bigTank(){
-      const bigTank =  new BigTank(this.scene,Phaser.Math.Between(1000,20000), 560);
+      const bigTank =  new BigTank(this.scene,Phaser.Math.Between(1000,20000), 560,"bigTank");
       this.scene.foeGroup.add(bigTank);
     }
 

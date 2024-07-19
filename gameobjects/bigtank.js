@@ -1,12 +1,15 @@
 import Explosion from "./explosion";
 import BigTankMissile from './bigtankmissile';
-
+const TYPES = {
+    bigTank: { points: 800,lives: 1}
+}
 
 export default class BigTank extends Phaser.Physics.Arcade.Sprite {
     animsCreated= false;
-    constructor(scene, x, y) {
+    constructor(scene, x, y,name) {
         super(scene, x, y, "bigtank");
         this.name = "bigtank";
+        this.points = TYPES[name].points;
         this.scene = scene;
         this.id = Math.random();
         this.scene.physics.add.existing(this);
@@ -105,7 +108,7 @@ export default class BigTank extends Phaser.Physics.Arcade.Sprite {
         let explosionRad = 100;
         const explosion = this.scene.add.circle(this.x, this.y, 5)
             .setStrokeStyle(20, 0x563b14);
-        //this.showPoints(this.points);
+        this.showPoints(this.points);
         this.scene.tweens.add({
             targets: explosion,
             radius: { from: 10, to: radius },
@@ -121,6 +124,20 @@ export default class BigTank extends Phaser.Physics.Arcade.Sprite {
         this.destroy();
 
 
+    }
+
+    showPoints(score, color=0xff0000){
+        let text= this.scene.add.bitmapText(this.x +20, this.y -30, "wendy", "+" + score,40,color)
+        .setOrigin(0.5);
+        this.scene.tweens.add({
+            targets: text,
+            duration: 800,
+            alpha:{from:1, to:0},
+            y: {from: this.y -20, to: this.y - 80},
+            onComplete: ()=> {
+                text.destroy;
+            }
+        });
     }
 
 

@@ -1,5 +1,5 @@
 export default class Flare extends Phaser.Physics.Arcade.Sprite{
-    constructor(scene,x,y,name="flare",velocityX = 50,velocityY= 20){
+    constructor(scene,x,y,name="flare",velocityX = 50,velocityY= 100){
         super(scene,x,y,name);
         this.name = name;
         this.id = Math.random();

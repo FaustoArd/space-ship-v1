@@ -156,7 +156,10 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
             this.body.setVelocityX(this.walkVelocity);
             this.playerTurnUp = true;
             this.playerTurnDown = false;
+            this.playerLeftTurnUp = false;
+            this.playerLeftTurnDown = false;
         }else if(this.cursors.up.isDown&&!this.right){
+            this.right = false;
             this.anims.play("playerupleft", true);
             this.y -= 1.8;
             this.body.setVelocityX(-this.walkVelocity);
@@ -172,6 +175,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
             this.playerLeftTurnUp = false;
             this.playerLeftTurnDown = false;
         }else if(this.cursors.down.isDown&&!this.right){
+            this.right = false;
             this.anims.play("playerdownleft", true);
             this.y += 1.8;
             this.playerTurnUp = false;
@@ -206,8 +210,17 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
             
         } else if (this.playerTurnDown) {
             this.ShootingPatterns.shoot(this.x + 30, this.y+10, 'laser', this.playerYTurnDown,this.right);
-        } else {
-            this.ShootingPatterns.shoot(this.x + 30, this.y-10, 'laser', 0,this.right);
+        }else if(this.playerLeftTurnUp&&!this.playerTurnUp) {
+            this.ShootingPatterns.shoot(this.x - 30, this.y-20, 'laser', this.playerYTurnUp,this.right);
+        }
+         else if(this.playerLeftTurnDown&&!this.playerTurnDown){
+             this.ShootingPatterns.shoot(this.x - 30, this.y+10, 'laser', this.playerYTurnDown,this.right);
+         }
+
+        else if(!this.right){
+            this.ShootingPatterns.shoot(this.x - 30, this.y-10, 'laser', 0,this.right);
+        }else if(this.right){
+            this.ShootingPatterns.shoot(this.x +30, this.y-10, 'laser', 0,this.right);
         }
       
 
