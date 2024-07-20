@@ -119,6 +119,7 @@ animsCreated= false;
             explosion.destroy();
         },
     });
+    this.scene.cameras.main.shake(200,0.010);
     new Explosion(this.scene, this.x, this.y, explosionRad);
     this.createBlackHole();
    this.destroy();

@@ -299,6 +299,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
                 explosion.destroy();
             },
         });
+        this.scene.cameras.main.shake(700,0.010);
         this.anims.play("playerexplosion", true);
         new Explosion(this.scene, this.x, this.y, explosionRad);
         
