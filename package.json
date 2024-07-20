@@ -3,15 +3,21 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "main": "main.js",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "start": "electron main.js",
+    "package": "electron-builder"
   },
   "devDependencies": {
-    "vite": "^5.3.1"
+   "electron": "1.6.7",
+   "electron-builder": "17.3.1"
   },
   "dependencies": {
     "phaser": "^3.80.1"
-  }
+  },
+  "build": {
+  "appId": "com.example.app",
+  "files": "!build-assets${/*}"
+}
+
 }
