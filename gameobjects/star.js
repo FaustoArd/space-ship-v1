@@ -1,4 +1,5 @@
 import Explosion from './explosion';
+import BlackHole from './blackhole';
 
 const TYPES = {
     star: { points: 400,lives: 1}
@@ -62,15 +63,15 @@ animsCreated= false;
         frameRate:3,
         repeat: -1,
     });
-    this.scene.anims.create({
-        key: "blackhole",
-        frames: this.scene.anims.generateFrameNumbers("star",{
-            start:4,
-            end:6,
-        }),
-        frameRate:3,
-        repeat: -1,
-    });
+    // this.scene.anims.create({
+    //     key: "blackhole",
+    //     frames: this.scene.anims.generateFrameNumbers("star",{
+    //         start:4,
+    //         end:6,
+    //     }),
+    //     frameRate:3,
+    //     repeat: -1,
+    // });
     this.anims.play("starIdle", true);
     this.direction = -1;
     this.animsCreated = true;
@@ -84,8 +85,15 @@ animsCreated= false;
    }
 
    destroy(){
+    
     this.dead = true;
     this.body.enable = false;
+    
+   }
+
+   createBlackHole(star){
+    const blackHole = new BlackHole(this.scene,star.x,star.y,"blackhole",0,0);
+    this.scene.foeGroup.add(blackHole);
    }
 
    explode() {
@@ -100,6 +108,7 @@ animsCreated= false;
     this.scene.tweens.add({
         targets: explosion,
         radius: { from: 10, to: radius },
+        
         alpha: { from: 1, to: 0.3 },
         duration: 550,
         onComplete: () => {
@@ -107,11 +116,13 @@ animsCreated= false;
         },
     });
     new Explosion(this.scene, this.x, this.y, explosionRad);
-    this.anims.play("blackhole", true);
+    this.createBlackHole(this);
    this.destroy();
 
 
+
 }
+
    
 showPoints(score, color=0xff0000){
     let text= this.scene.add.bitmapText(this.x +20, this.y -30, "wendy", "+" + score,40,color)

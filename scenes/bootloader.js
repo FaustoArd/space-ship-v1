@@ -40,6 +40,11 @@ export default class Bootloader extends Phaser.Scene {
             frameHeight: 64,
         });
 
+        this.load.spritesheet("blackhole", "assets/images/blackhole.png", {
+            frameWidth: 64,
+            frameHeight: 64,
+        });
+
         this.load.spritesheet("ship", "assets/images/space_ship.png", {
             frameWidth: 64,
             frameHeight: 64,
