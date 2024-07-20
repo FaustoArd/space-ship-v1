@@ -11,6 +11,11 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     playerLeftTurnUp = false;
     playerLeftTurnDown = false;
     directionRight;
+    straightShoot;
+    rightUp = false;
+    rightDown = false;
+    leftUp= false;
+    leftDown=false;
     constructor(scene, x, y,name="player", health = 10) {
         super(scene, x, y, "ship");
 
@@ -134,62 +139,107 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     update() {
+        this.rightUp = false;
+        this.rightDown = false;
+        this.leftUp= false;
+        this.leftDown=false;
         this.bigTankEnabled =  this.scene.foes.update(this.bigTankEnabled,this);
         //RIGHT
         if(this.cursors.right.isDown){
+            this.straightShoot =true;
             this.directionRight = true;
+            this.playerTurnUp = false;
             this.body.setVelocityX(this.walkVelocity);
             this.anims.play("playermove")
              //LEFT
         }else if(this.cursors.left.isDown){
-            this.directionRight = false;
+            this.playerTurnUp = false;
+            this.straightShoot =true;
+           this.directionRight = false;
             this.body.setVelocityX(-this.walkVelocity);
             this.anims.play("playermoveleft")
             //UP, DIRECTION RIGHT
         } else if(this.cursors.up.isDown&&this.directionRight){
+            this.straightShoot =false;
+            this.playerTurnUp = true;
+            this.directionRight = true;
             this.anims.play("playerup", true);
             this.y -= 1.8;
             this.body.setVelocityX(this.walkVelocity);
         }
         //DOWN, DIRECTION RIGHT
         else if(this.cursors.down.isDown&&this.directionRight){
+            this.straightShoot =false;
+            this.playerTurnUp = false;
+            this.directionRight = true;
             this.anims.play("playerdown", true);
             this.y += 1.8;
             //DOWN, DIRECTION LEFT
         }else if(this.cursors.down.isDown&&!this.directionRight){
+            this.straightShoot =false;
+            this.playerTurnUp = false;
+            this.directionRight = false;
             this.anims.play("playerdownleft", true);
             this.y += 1.8;
             this.body.setVelocityX(-this.walkVelocity);
             //UP, DIRECTION LEFT
         }else if(this.cursors.up.isDown&&!this.directionRight){
+            this.straightShoot =false;
+            this.playerTurnUp = true;
+            this.directionRight = false;
             this.anims.play("playerupleft", true);
             this.y -= 1.8;
         }
-        //UP RIGHT
+        //RIGHT-UP
         if(this.cursors.up.isDown&&this.directionRight){
+            this.rightUp= true;
+            this.directionRight = true;
+            this.straightShoot =false;
+            this.playerTurnUp = true;
             this.anims.play("playerup", true);
             this.y -= 1.8;
             this.body.setVelocityX(this.walkVelocity);
         }
-        //UP LEFT
+        //LEFT-UP 
         if(this.cursors.up.isDown&&!this.directionRight){
+            this.leftUp = true;
+            this.directionRight = false;
+            this.straightShoot =false;
+            this.playerTurnUp = true;
             this.anims.play("playerupleft", true);
             this.y -= 1.8;
         }
-        //DOWN RIGHT
+        //RIGHT-DOWN
         if(this.cursors.down.isDown&&this.directionRight){
+            this.rightDown = true;
+            this.directionRight = true;
+            this.straightShoot =false;
+            this.playerTurnUp = false;
             this.anims.play("playerdown", true);
             this.y += 1.8;
         }
-        //DOWN LEFT
+        //LEFT-DOWN
         if(this.cursors.down.isDown&&!this.directionRight){
+            this.leftDown = true;
+            this.directionRight = false;
+            this.straightShoot =false;
+            this.playerTurnUp = false;
             this.anims.play("playerdownleft", true);
             this.y += 1.8;
           
         }
+
         if (Phaser.Input.Keyboard.JustDown(this.cursors.space)) {
             this.shoot();
         }
+        if(this.cursors.shift.isDown){
+            this.body.setVelocityX(0);
+        }
+        if(Phaser.Input.Keyboard.JustDown(this.C)){
+            this.fireFlare();
+        }
+
+
        
     }
 
@@ -206,27 +256,24 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         return this.y;
     }
 
-    shoot() {
-        if (this.playerTurnUp)  {
-            this.ShootingPatterns.shoot(this.x + 30, this.y-20, 'laser', this.playerYTurnUp,this.right);
-            
-        } 
-        else if (this.playerTurnDown) {
-            this.ShootingPatterns.shoot(this.x + 30, this.y+10, 'laser', this.playerYTurnDown,this.right);
-        }
-        else if(this.playerLeftTurnUp&&!this.playerTurnUp) {
-            this.ShootingPatterns.shoot(this.x - 30, this.y-20, 'laser', this.playerYTurnUp,this.right);
-        }
-         else if(this.playerLeftTurnDown&&!this.playerTurnDown){
-             this.ShootingPatterns.shoot(this.x - 30, this.y+10, 'laser', this.playerYTurnDown,this.right);
-         }
 
-        else if(!this.right){
-            this.ShootingPatterns.shoot(this.x - 30, this.y-10, 'laser', 0,this.right);
-        }
-        else if(this.right){
-            this.ShootingPatterns.shoot(this.x +30, this.y-10, 'laser', 0,this.right);
-        }
+    shoot() {
+      if(this.playerTurnUp&&!this.straightShoot&&this.directionRight){
+        this.ShootingPatterns.shoot(this.x + 30, this.y-20, 'laser', this.playerYTurnUp,this.directionRight);
+      }else if(!this.playerTurnUp&&!this.straightShoot&&this.directionRight){
+        this.ShootingPatterns.shoot(this.x + 30, this.y+10, 'laser', this.playerYTurnDown,this.directionRight);
+      }else if(this.playerTurnUp&&!this.straightShoot&&this.directionRight){
+        this.ShootingPatterns.shoot(this.x - 30, this.y-20, 'laser', this.playerYTurnUp,this.directionRight);
+      }
+       else if(this.directionRight&&this.straightShoot){
+        this.ShootingPatterns.shoot(this.x + 30, this.y-10, 'laser', 0,this.directionRight);
+      }else if(!this.directionRight&&this.straightShoot){
+        this.ShootingPatterns.shoot(this.x - 30, this.y-10, 'laser', 0,this.directionRight);
+      }else if(this.leftUp){
+        this.ShootingPatterns.shoot(this.x + 30, this.y-20, 'laser', this.playerYTurnUp,this.directionRight);
+      }else if(this.leftDown){
+        this.ShootingPatterns.shoot(this.x + 30, this.y+10, 'laser', this.playerYTurnDown,this.directionRight);
+      }
       
 
     }
