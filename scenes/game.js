@@ -59,6 +59,7 @@ export default class Game extends Phaser.Scene {
         this.addBigTankMissiles();
         this.addFlares();
         this.addScores();
+        this.addBlackHoles();
         this.cameras.main.startFollow(this.player, true, 0.05, 0.05
             , 0, 240);
         this.physics.world.enable([this.player]);
@@ -109,6 +110,10 @@ export default class Game extends Phaser.Scene {
         this.foeGroup = this.add.group();
         this.foeWaveGroup = this.add.group();
         this.foes = new FoeGenerator(this);
+    }
+
+    addBlackHoles(){
+        this.blackHoleGroup = this.add.group();
     }
 
     addShots() {
@@ -187,6 +192,16 @@ export default class Game extends Phaser.Scene {
         this.physics.add.overlap(
             this.player,
             this.foeGroup,
+            this.playerExplode,
+            () => {
+                return true;
+            },
+            this
+        );
+
+        this.physics.add.overlap(
+            this.player,
+            this.blackHoleGroup,
             this.playerExplode,
             () => {
                 return true;

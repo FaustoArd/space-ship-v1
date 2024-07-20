@@ -14,30 +14,41 @@ export default class FoeGenerator{
 
     generateStars(){
         this.generateEvent1 = this.scene.time.addEvent({
-            delay: 750,
+            delay: 0,
             callback: () => this.star(),
             callbackScope : this,
-            loop:true,
+            loop:false,
         });
     }
 
     generateBigTanks(){
       this.generateEvent2 = this.scene.time.addEvent({
-        delay:750,
+        delay:0,
         callback: () => this.bigTank(),
         callbackScope: this,
-        loop:true,
+        loop:false,
       });
     }
 
+    bigTankXPlace= 1500;
     bigTank(){
-      const bigTank =  new BigTank(this.scene,Phaser.Math.Between(1000,20000), 560,"bigTank");
-      this.scene.foeGroup.add(bigTank);
-    }
+      for(var i= 0;i<10;i++){
+        const bigTank =  new BigTank(this.scene,this.bigTankXPlace, 560,"bigTank");
+        this.scene.foeGroup.add(bigTank);
+        this.bigTankXPlace += 800;
+      }
 
+    
+    }
+    starXPlace = 1200;
     star(){
-      const star = new Star(this.scene, Phaser.Math.Between(1000, 20000), Phaser.Math.Between(200, 500), "star", 0, 0);
+      for(var i = 0;i<15 ; i++){
+        const star = new Star(this.scene,this.starXPlace, Phaser.Math.Between(200, 500), "star", 0, 0);
         this.scene.foeGroup.add(star );
+        this.starXPlace += 600
+      }
+
+     
     }
     add() {
       const star = new Star( this.scene, Phaser.Math.Between(32, this.scene.width - 32),);

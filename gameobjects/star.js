@@ -91,12 +91,16 @@ animsCreated= false;
     
    }
 
-   createBlackHole(star){
-    const blackHole = new BlackHole(this.scene,star.x,star.y,"blackhole",0,0);
-    this.scene.foeGroup.add(blackHole);
+   createBlackHole(){
+    const blackHole = new BlackHole(this.scene,this.starDestroyedX,this.starDestroyedY,"blackhole",0,0);
+    this.scene.blackHoleGroup.add(blackHole);
    }
 
+   starDestroyedX = 0;
+   starDestroyedY = 0;
    explode() {
+    this.starDestroyedX = this.x;
+    this.starDestroyedY = this.y;
     let radius = 100;
     let explosionRad = 100;
     const explosion = this.scene.add.circle(this.x, this.y, 5)
@@ -116,7 +120,7 @@ animsCreated= false;
         },
     });
     new Explosion(this.scene, this.x, this.y, explosionRad);
-    this.createBlackHole(this);
+    this.createBlackHole();
    this.destroy();
 
 
