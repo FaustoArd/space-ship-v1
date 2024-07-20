@@ -10,6 +10,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     playerTurnDown = false;
     playerLeftTurnUp = false;
     playerLeftTurnDown = false;
+    directionRight;
     constructor(scene, x, y,name="player", health = 10) {
         super(scene, x, y, "ship");
 
@@ -42,6 +43,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this.S = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
         this.D = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         this.C = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.C);
+        this.RIGHTUP = this.scene.input.keyboard.addKeys(Phaser.Input.Keyboard.KeyCodes.RIGHT,Phaser.Input.Keyboard.KeyCodes.UP)
         this.cursors = this.scene.input.keyboard.createCursorKeys();
       
     }
@@ -133,62 +135,62 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
     update() {
         this.bigTankEnabled =  this.scene.foes.update(this.bigTankEnabled,this);
-        // if (this.death) return;
-        this.playerTurnUp = false;
-        this.playerTurnDown = false;
-        this.velocityX = this.walkVelocity;
-        if(this.cursor.shift.isDown){
-            this.body.setVelocityX(0);
-        }
+        //RIGHT
         if(this.cursors.right.isDown){
-            this.right = true;
-            //this.flipX = this.body.velocity.x < 0;
+            this.directionRight = true;
             this.body.setVelocityX(this.walkVelocity);
             this.anims.play("playermove")
+             //LEFT
         }else if(this.cursors.left.isDown){
-            this.right = false;
-            //this.flipX = this.body.velocity.x < 0;
+            this.directionRight = false;
             this.body.setVelocityX(-this.walkVelocity);
             this.anims.play("playermoveleft")
-        }else if(this.cursors.up.isDown&&this.right){
+            //UP, DIRECTION RIGHT
+        } else if(this.cursors.up.isDown&&this.directionRight){
             this.anims.play("playerup", true);
             this.y -= 1.8;
             this.body.setVelocityX(this.walkVelocity);
-            this.playerTurnUp = true;
-            this.playerTurnDown = false;
-            this.playerLeftTurnUp = false;
-            this.playerLeftTurnDown = false;
-        }else if(this.cursors.up.isDown&&!this.right){
-            this.right = false;
-            this.anims.play("playerupleft", true);
-            this.y -= 1.8;
-            this.body.setVelocityX(-this.walkVelocity);
-            this.playerTurnUp = false;
-            this.playerTurnDown = false;
-            this.playerLeftTurnUp = true;
-            this.playerLeftTurnDown = false;
-        }else if(this.cursors.down.isDown&&this.right){
+        }
+        //DOWN, DIRECTION RIGHT
+        else if(this.cursors.down.isDown&&this.directionRight){
             this.anims.play("playerdown", true);
             this.y += 1.8;
-            this.playerTurnUp = false;
-            this.playerTurnDown = true;
-            this.playerLeftTurnUp = false;
-            this.playerLeftTurnDown = false;
-        }else if(this.cursors.down.isDown&&!this.right){
-            this.right = false;
+            //DOWN, DIRECTION LEFT
+        }else if(this.cursors.down.isDown&&!this.directionRight){
             this.anims.play("playerdownleft", true);
             this.y += 1.8;
-            this.playerTurnUp = false;
-            this.playerTurnDown = false;
-            this.playerLeftTurnUp = false;
-            this.playerLeftTurnDown = true;
+            this.body.setVelocityX(-this.walkVelocity);
+            //UP, DIRECTION LEFT
+        }else if(this.cursors.up.isDown&&!this.directionRight){
+            this.anims.play("playerupleft", true);
+            this.y -= 1.8;
+        }
+        //UP RIGHT
+        if(this.cursors.up.isDown&&this.directionRight){
+            this.anims.play("playerup", true);
+            this.y -= 1.8;
+            this.body.setVelocityX(this.walkVelocity);
+        }
+        //UP LEFT
+        if(this.cursors.up.isDown&&!this.directionRight){
+            this.anims.play("playerupleft", true);
+            this.y -= 1.8;
+        }
+        //DOWN RIGHT
+        if(this.cursors.down.isDown&&this.directionRight){
+            this.anims.play("playerdown", true);
+            this.y += 1.8;
+        }
+        //DOWN LEFT
+        if(this.cursors.down.isDown&&!this.directionRight){
+            this.anims.play("playerdownleft", true);
+            this.y += 1.8;
+          
         }
         if (Phaser.Input.Keyboard.JustDown(this.cursors.space)) {
             this.shoot();
         }
-        if(Phaser.Input.Keyboard.JustDown(this.C)){
-            this.fireFlare();
-        }
+       
     }
 
     fireFlare(){
@@ -208,9 +210,11 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         if (this.playerTurnUp)  {
             this.ShootingPatterns.shoot(this.x + 30, this.y-20, 'laser', this.playerYTurnUp,this.right);
             
-        } else if (this.playerTurnDown) {
+        } 
+        else if (this.playerTurnDown) {
             this.ShootingPatterns.shoot(this.x + 30, this.y+10, 'laser', this.playerYTurnDown,this.right);
-        }else if(this.playerLeftTurnUp&&!this.playerTurnUp) {
+        }
+        else if(this.playerLeftTurnUp&&!this.playerTurnUp) {
             this.ShootingPatterns.shoot(this.x - 30, this.y-20, 'laser', this.playerYTurnUp,this.right);
         }
          else if(this.playerLeftTurnDown&&!this.playerTurnDown){
@@ -219,7 +223,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
         else if(!this.right){
             this.ShootingPatterns.shoot(this.x - 30, this.y-10, 'laser', 0,this.right);
-        }else if(this.right){
+        }
+        else if(this.right){
             this.ShootingPatterns.shoot(this.x +30, this.y-10, 'laser', 0,this.right);
         }
       
