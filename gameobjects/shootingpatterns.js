@@ -15,7 +15,7 @@ export default class ShootingPatterns{
     }
 
     single(x, y, type,playerTurnY,playerLeft){
-        console.log("SIngle: ", playerLeft)
+      
         if(playerLeft){
             this.scene.shots.add(new Shot(this.scene, x, y, type, this.name,500,playerTurnY));
         }else{

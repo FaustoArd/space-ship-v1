@@ -45,7 +45,7 @@ export default class BigTankMissile extends Phaser.Physics.Arcade.Sprite {
     }
 
     explode() {
-        console.log("bigtank_missile explode!!!")
+       
         let radius = 100;
         let explosionRad = 100;
         const explosion = this.scene.add.circle(this.x, this.y, 5)

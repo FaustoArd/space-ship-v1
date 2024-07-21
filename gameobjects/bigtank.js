@@ -1,6 +1,6 @@
 import Explosion from "./explosion";
 import BigTankMissile from './bigtankmissile';
-import BigTankDestroyed from './bigtankdestroyed';
+
 const TYPES = {
     bigTank: { points: 800,lives: 1}
 }
@@ -19,6 +19,7 @@ export default class BigTank extends Phaser.Physics.Arcade.Sprite {
         this.scene.add.existing(this);
         this.body.setCollideWorldBounds(true);
         this.bigTankMissile;
+        this.bigTankDestroyed = false;
         this.init();
 
     }
@@ -54,16 +55,16 @@ export default class BigTank extends Phaser.Physics.Arcade.Sprite {
             repeat: 0
         });
 
-        // this.scene.anims.create({
-        //     key: "bigtankdestroyed",
-        //     frames: this.scene.anims.generateFrameNumbers("bigtank", {
-        //         start: 4,
-        //         end: 4,
-        //     }),
+         this.scene.anims.create({
+             key: "bigtankdestroyed",
+             frames: this.scene.anims.generateFrameNumbers("bigtank", {
+                 start: 4,
+                 end: 4,
+             }),
 
-        //     frameRate: 5,
-        //     repeat: 0
-        // });
+             frameRate: 5,
+             repeat: 0
+         });
         this.animsCreated = true;
 
     }
@@ -84,6 +85,7 @@ export default class BigTank extends Phaser.Physics.Arcade.Sprite {
             return false;
 
         }
+        
 
 
     }
@@ -101,38 +103,40 @@ export default class BigTank extends Phaser.Physics.Arcade.Sprite {
     }
     destroy() {
         this.dead = true;
-        this.body.enable = false;
-        this.createBigTankDestroyed();
+       this.bigTankDestroyed = true;
+       
     }
 
-    createBigTankDestroyed(){
-        const bigTankDestroyed = new BigTankDestroyed(this.scene,this.bigTankX,this.bigTankY,"bigTankDestroyed")
-        this.scene.bigTankDestroyedGroup.add(bigTankDestroyed);
-    }
+  
 
     bigTankX = 0;
     bigTankY= 0;
     explode() {
-        this.bigTankX = this.x;
-        this.bigTankY = this.y;
-        let radius = 100;
-        let explosionRad = 100;
-        const explosion = this.scene.add.circle(this.x, this.y, 5)
-            .setStrokeStyle(20, 0x563b14);
-        this.showPoints(this.points);
-        this.scene.tweens.add({
-            targets: explosion,
-            radius: { from: 10, to: radius },
-            alpha: { from: 1, to: 0.3 },
-            duration: 550,
-            onComplete: () => {
-                explosion.destroy();
-            },
-        });
-
-        new Explosion(this.scene, this.x, this.y, explosionRad);
-        
-        this.destroy();
+        if(!this.bigTankDestroyed){
+            this.bigTankX = this.x;
+            this.bigTankY = this.y;
+            let radius = 100;
+            let explosionRad = 100;
+            const explosion = this.scene.add.circle(this.x, this.y, 5)
+                .setStrokeStyle(20, 0x563b14);
+            this.showPoints(this.points);
+            this.scene.tweens.add({
+                targets: explosion,
+                radius: { from: 10, to: radius },
+                alpha: { from: 1, to: 0.3 },
+                duration: 550,
+                onComplete: () => {
+                    explosion.destroy();
+                },
+            });
+    
+            new Explosion(this.scene, this.x, this.y, explosionRad);
+            this.anims.play("bigtankdestroyed", true);
+             this.destroy();
+        }else{
+            return;
+        }
+       
 
 
     }
