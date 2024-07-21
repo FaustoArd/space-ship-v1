@@ -102,12 +102,13 @@ export default class BigTank extends Phaser.Physics.Arcade.Sprite {
     destroy() {
         this.dead = true;
         this.body.enable = false;
-        this.createBigTankDestroyed();
+        //this.createBigTankDestroyed(scene);
+      
     }
 
-    createBigTankDestroyed(){
-        const bigTankDestroyed = new BigTankDestroyed(this.scene,this.bigTankX,this.bigTankY,"bigTankDestroyed")
-        this.scene.bigTankDestroyedGroup.add(bigTankDestroyed);
+    createBigTankDestroyed(scene,bigTankX,bigTankY){
+        const bigTankDestroyed = new BigTankDestroyed(this.scene,bigTankX,bigTankY,"bigTankDestroyed")
+        scene.foeGroup.add(bigTankDestroyed);
     }
 
     bigTankX = 0;
@@ -131,7 +132,7 @@ export default class BigTank extends Phaser.Physics.Arcade.Sprite {
         });
 
         new Explosion(this.scene, this.x, this.y, explosionRad);
-        
+       
         this.destroy();
 
 
