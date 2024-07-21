@@ -4,18 +4,20 @@ import Flare from "./flare";
 
 
 export default class Player extends Phaser.Physics.Arcade.Sprite {
+
     playerYTurnUp = -300;
     playerYTurnDown = 300;
     playerTurnUp = false;
-    playerTurnDown = false;
-    playerLeftTurnUp = false;
-    playerLeftTurnDown = false;
+   // playerTurnDown = false;
+   // playerLeftTurnUp = false;
+   // playerLeftTurnDown = false;
     directionRight;
     straightShoot;
     rightUp = false;
     rightDown = false;
     leftUp= false;
     leftDown=false;
+    flaresLeft = 5;
     constructor(scene, x, y,name="player", health = 10) {
         super(scene, x, y, "ship");
 
@@ -236,7 +238,9 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
             this.body.setVelocityX(0);
         }
         if(Phaser.Input.Keyboard.JustDown(this.C)){
+            if(this.flaresLeft<=0)return;
             this.fireFlare();
+            this.flaresLeft -=1;
         }
 
 
@@ -247,6 +251,10 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         const flare = new Flare(this.scene,this.x-10,this.y+20)
         this.scene.flareGroup.add(flare);
         
+    }
+
+    getFlareReward(){
+        this.flaresLeft = 5;
     }
 
     getPlayerX() {
@@ -282,6 +290,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this.dead = true;
         this.body.enable = false;
        
+       
+       
     }
 
     explode() {
@@ -302,7 +312,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this.scene.cameras.main.shake(700,0.010);
         this.anims.play("playerexplosion", true);
         new Explosion(this.scene, this.x, this.y, explosionRad);
-        
+       
         this.destroy();
 
 

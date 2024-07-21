@@ -1,5 +1,6 @@
 import Star from "./star";
 import BigTank from "./bigtank";
+import FlareReward from './rewards';
 
 export default class FoeGenerator{
     constructor(scene){
@@ -7,6 +8,7 @@ export default class FoeGenerator{
         this.waveFoes = [];
         this.generateStars();
         this.generateBigTanks();
+        this.generateFlareRewards();
         this.activeWave = false;
         this.waves = 0;
       
@@ -30,6 +32,15 @@ export default class FoeGenerator{
       });
     }
 
+    generateFlareRewards(){
+      this.generateEvent3 = this.scene.time.addEvent({
+        delay:0,
+        callback:() => this.flareReward(),
+        callbackScope: this,
+        loop:false,
+      })
+    }
+
     bigTankXPlace= 1500;
     bigTank(){
       for(var i= 0;i<10;i++){
@@ -47,9 +58,14 @@ export default class FoeGenerator{
         this.scene.foeGroup.add(star );
         this.starXPlace += 600
       }
+}
+flareReward(){
+  for(var i = 0;i<10; i++){
+    const flareReward = new FlareReward(this.scene,Phaser.Math.Between(2000,15000), Phaser.Math.Between(200,530));
+    this.scene.rewardGroup.add(flareReward);
+  }
+}
 
-     
-    }
     add() {
       const star = new Star( this.scene, Phaser.Math.Between(32, this.scene.width - 32),);
       this.scene.foeGroup.add(star);

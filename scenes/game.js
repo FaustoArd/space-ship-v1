@@ -61,6 +61,7 @@ export default class Game extends Phaser.Scene {
         this.addScores();
         this.addBlackHoles();
         this.addBigTankDestroyed();
+        this.addFlareRewards();
         this.cameras.main.startFollow(this.player, true, 0.05, 0.05,0, 240);
         this.physics.world.enable([this.player]);
 
@@ -131,6 +132,10 @@ export default class Game extends Phaser.Scene {
 
     addFlares() {
         this.flareGroup = this.add.group();
+    }
+
+    addFlareRewards(){
+        this.rewardGroup = this.add.group();
     }
 
     update() {
@@ -207,6 +212,15 @@ export default class Game extends Phaser.Scene {
             this.player,
             this.blackHoleGroup,
             this.playerExplode,
+            () => {
+                return true;
+            },
+            this
+        );
+        this.physics.add.overlap(
+            this.player,
+            this.rewardGroup,
+            this.getReward,
             () => {
                 return true;
             },
@@ -323,6 +337,7 @@ export default class Game extends Phaser.Scene {
       
         this.player.explode();
         this.playerDead = true;
+      
     }
     playerMissileExplode(player, bigtank_missile) {
         this.player.explode();
@@ -337,6 +352,14 @@ export default class Game extends Phaser.Scene {
            
         }
 
+    }
+
+    getReward(player,reward){
+        if(reward.name==="flarereward"){
+            console.log("Flare reward!!");
+            reward.getFlareReward();
+            player.getFlareReward();
+        }
     }
 
     missileExplode(bigtank_missile) {

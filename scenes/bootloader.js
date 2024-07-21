@@ -78,6 +78,11 @@ export default class Bootloader extends Phaser.Scene {
             frameHeight: 32,
         });
 
+        this.load.spritesheet("flarereward", "assets/images/flare_reward.png", {
+            frameWidth: 16,
+            frameHeight: 16,
+        });
+
         this.load.bitmapFont(
             "wendy",
             "assets/fonts/wendy.png",
