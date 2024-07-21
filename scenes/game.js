@@ -60,6 +60,7 @@ export default class Game extends Phaser.Scene {
         this.addFlares();
         this.addScores();
         this.addBlackHoles();
+        this.addBigTankDestroyed();
         this.cameras.main.startFollow(this.player, true, 0.05, 0.05
             , 0, 240);
         this.physics.world.enable([this.player]);
@@ -116,6 +117,10 @@ export default class Game extends Phaser.Scene {
         this.blackHoleGroup = this.add.group();
     }
 
+    addBigTankDestroyed(){
+        this.bigTankDestroyedGroup = this.add.group();
+    }
+
     addShots() {
         this.shotsLayer = this.add.layer();
         this.shots = this.add.group();
@@ -170,15 +175,15 @@ export default class Game extends Phaser.Scene {
 
 
     addColliders() {
-        this.physics.add.overlap(
-            this.player,
-            this.bigTank,
-            this.playerExplode,
-            () => {
-                return true;
-            },
-            this
-        );
+        // this.physics.add.overlap(
+        //     this.player,
+        //     this.bigTank,
+        //     this.playerExplode,
+        //     () => {
+        //         return true;
+        //     },
+        //     this
+        // );
         this.physics.add.collider(
             this.player,
             this.platformGroup,
@@ -208,6 +213,15 @@ export default class Game extends Phaser.Scene {
             },
             this
         );
+        this.physics.add.overlap(
+            this.shots,
+            this.blackHoleGroup,
+            this.shootBlackHoleSuccesful,
+            () => {
+                return true;
+            },
+            this
+        );
 
         this.physics.add.overlap(
             this.player,
@@ -232,6 +246,24 @@ export default class Game extends Phaser.Scene {
             this.shots,
             this.bigTank,
             this.shootBigTanksuccesfull,
+            () => {
+                return true;
+            },
+            this
+        );
+        this.physics.add.overlap(
+            this.shots,
+            this.bigTankDestroyedGroup,
+            this.shootBigTankDestroyedSuccesfull,
+            () => {
+                return true;
+            },
+            this
+        );
+        this.physics.add.overlap(
+            this.player,
+            this.bigTankDestroyedGroup,
+            this.playerExplode,
             () => {
                 return true;
             },
@@ -321,6 +353,12 @@ export default class Game extends Phaser.Scene {
         this.bigTankEnabled = false;
         const point = this.lights.addPointLight(shot.x, shot.y, 0xffffff, 10, 0.7);
         bigTank.explode();
+        shot.destroy();
+    }
+    shootBigTankDestroyedSuccesfull(shot,bigTankDestroyed){
+       shot.destroy();
+    }
+    shootBlackHoleSuccesful(shot){
         shot.destroy();
     }
 
