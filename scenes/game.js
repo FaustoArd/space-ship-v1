@@ -46,8 +46,8 @@ export default class Game extends Phaser.Scene {
         this.height = this.sys.game.config.height;
         this.center_width = this.width / 2;
         this.center_height = this.height / 2;
-        this.cameras.main.setBackgroundColor(0x000000);
-        this.add.tileSprite(0, 0, 683 * 10, 768, "landscape").setOrigin(0.5);
+       // this.cameras.main.setBackgroundColor(0x000000);
+        //this.add.tileSprite(0, 0, 683 * 10, 768, "landscape").setOrigin(0.5);
         this.cameras.main.setBounds(0, 0, 20920 * 2, 20080 * 2);
         this.physics.world.setBounds(0, 0, 20920 * 2, 20080 * 2);
         this.lights.enable();
@@ -61,8 +61,7 @@ export default class Game extends Phaser.Scene {
         this.addScores();
         this.addBlackHoles();
         this.addBigTankDestroyed();
-        this.cameras.main.startFollow(this.player, true, 0.05, 0.05
-            , 0, 240);
+        this.cameras.main.startFollow(this.player, true, 0.05, 0.05,0, 240);
         this.physics.world.enable([this.player]);
 
         this.generator = new Generator(this);
@@ -321,7 +320,7 @@ export default class Game extends Phaser.Scene {
     }
 
     playerExplode() {
-        console.log("player explode");
+      
         this.player.explode();
         this.playerDead = true;
     }
@@ -356,6 +355,7 @@ export default class Game extends Phaser.Scene {
         shot.destroy();
     }
     shootBigTankDestroyedSuccesfull(shot,bigTankDestroyed){
+        console.log("big tank destroyed");
        shot.destroy();
     }
     shootBlackHoleSuccesful(shot){
@@ -363,7 +363,7 @@ export default class Game extends Phaser.Scene {
     }
 
     shotStarSuccessfull(shot, foe) {
-        console.log("shot star!!!")
+      
         foe.explode();
         shot.destroy();
         this.updateScore("player",foe.points);

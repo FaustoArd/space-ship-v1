@@ -27,7 +27,7 @@ export default class BlackHole extends Phaser.Physics.Arcade.Sprite{
                 start:0,
                 end:8,
             }),
-            frameRate:15,
+            frameRate:240,
             repeat: -1,
         });
         this.anims.play("blackhole", true);

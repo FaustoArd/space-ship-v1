@@ -101,6 +101,7 @@ export default class Bootloader extends Phaser.Scene {
 
     setRegistry(){
         this.registry.set("score_player", 0);
+       // this.registry.set("gravity",0);
     }
 
     createBars() {
