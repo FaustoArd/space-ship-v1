@@ -80,7 +80,7 @@ export default class Game extends Phaser.Scene {
         });
         this.addPlatform(20000, this.width);
         this.addColliders();
-
+        this.playGameMusic();
 
     }
     addPlatform(platformWidth, posX) {
@@ -436,9 +436,36 @@ export default class Game extends Phaser.Scene {
         }
     }
 
+    playStartMusic(theme = "song1") {
+        this.theme = this.sound.add(theme);
+        this.theme.stop();
+        this.theme.play({
+          mute: false,
+          volume: 0.5,
+          rate: 1,
+          detune: 0,
+          seek: 0,
+          loop: true,
+          delay: 0,
+        });
+      }
+
+      playGameMusic(theme = "song2") {
+        this.theme = this.sound.add(theme);
+        this.theme.play({
+          mute: false,
+          volume: 1.5,
+          rate: 1,
+          detune: 0,
+          seek: 0,
+          loop: true,
+          delay: 0,
+        });
+      }
+    }
 
 
 
 
 
-}
+
