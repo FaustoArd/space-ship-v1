@@ -6,6 +6,12 @@ export default class Bootloader extends Phaser.Scene {
 
     preload() {
         this.createBars();
+        this.loadImages();
+        this.loadSpriteSheets();
+   
+          this.loadAudios();
+
+
         this.load.on(
             "progress",
             function (value) {
@@ -29,12 +35,31 @@ export default class Bootloader extends Phaser.Scene {
             this
         );
 
-        this.load.audio("music1", "assets/sounds/music1.mp3");
+    
+   
+        this.registry.set("score", 0);
+
+      
+        this.load.bitmapFont(
+            "wendy",
+            "assets/fonts/wendy.png",
+            "assets/fonts/wendy.xml"
+
+        );
+      
+
+        this.setRegistry();
+
+
+      
+    }
+
+    loadImages(){
         this.load.image("landscape", "assets/images/landscape.png");
-        this.load.audio("shoot", "assets/sounds/shoot.mp3");
         this.load.image("platform", "assets/images/platform1.png");
+    }
 
-
+    loadSpriteSheets(){
         this.load.spritesheet("star", "assets/images/star.png", {
             frameWidth: 64,
             frameHeight: 64,
@@ -49,9 +74,6 @@ export default class Bootloader extends Phaser.Scene {
             frameWidth: 64,
             frameHeight: 64,
         });
-
-        this.registry.set("score", 0);
-
         this.load.spritesheet("ship", "assets/images/space_ship.png", {
             frameWidth: 64,
             frameHeight: 64,
@@ -87,25 +109,17 @@ export default class Bootloader extends Phaser.Scene {
             frameHeight: 40,
         });
 
-        this.load.bitmapFont(
-            "wendy",
-            "assets/fonts/wendy.png",
-            "assets/fonts/wendy.xml"
 
-        );
+    }
 
-        this.setRegistry();
-
-
-        // Array(4).fill(0).forEach((_, i) => {
-        //     this.load.spritesheet(`bigtank${i+1}` ,`assets/images/bigtank${i+1}`);
-        // })
-
-        // Array(2)
-        // .fill(0)
-        // .forEach((_, i) => {
-        //   this.load.tilemapTiledJSON(`scene${i}`, `assets/maps/scene${i}.json`);
-        // });
+    loadAudios(){
+          //  this.load.audio("explosion1", "assets/sounds/explosion1.mp3");
+        //  this.load.audio("explosion2", "assets/sounds/explosion2.mp3");
+        //  this.load.audio("explosion3", "assets/sounds/explosion3.mp3");
+        //   this.load.audio("shot1", "assets/sounds/shot1.mp3");
+        //   this.load.audio("flare1", "assets/sounds/flare1.mp3");
+        //   this.load.audio("missilelaunch1", "assets/sounds/missilelaunch1.mp3");
+        this.load.audio("coin", "assets/sounds/coin.mp3");
     }
 
     setRegistry(){

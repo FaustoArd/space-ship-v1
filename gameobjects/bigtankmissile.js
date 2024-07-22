@@ -62,6 +62,7 @@ export default class BigTankMissile extends Phaser.Physics.Arcade.Sprite {
         });
         new Explosion(this.scene, this.x, this.y, explosionRad);
         this.destroy();
+        this.scene.cameras.main.shake(200,0.010);
 
 
     }

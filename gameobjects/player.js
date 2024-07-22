@@ -17,7 +17,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     rightDown = false;
     leftUp= false;
     leftDown=false;
-    flaresLeft = 5;
+    flaresLeft = 50;
     constructor(scene, x, y,name="player", health = 10) {
         super(scene, x, y, "ship");
 
@@ -248,8 +248,27 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     fireFlare(){
-        const flare = new Flare(this.scene,this.x-10,this.y+20)
-        this.scene.flareGroup.add(flare);
+        let radius = 60;
+        let explosionRad = 100;
+       
+        const explosion = this.scene.add.circle(this.x, this.y, 5)
+        .setStrokeStyle(20, 0xf8f8f3);
+    //this.showPoints(this.points);
+    this.scene.tweens.add({
+
+        targets: explosion,
+        radius: { from: 10, to: radius },
+        alpha: { from: 1, to: 0.3 },
+        duration: 550,
+        intensity: { from: 0.3, to: 0.7 },
+        repeat:0,
+        onComplete: () => {
+            explosion.destroy();
+        },
+    });
+         const flare = new Flare(this.scene,this.x-10,this.y+20)
+         this.scene.flareGroup.add(flare);
+         this.scene.cameras.main.shake(10,0.010);
         
     }
 
@@ -266,6 +285,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
 
     shoot() {
+        this.scene.playAudio("shot");
       if(this.playerTurnUp&&!this.straightShoot&&this.directionRight){
         this.ShootingPatterns.shoot(this.x + 30, this.y-20, 'laser', this.playerYTurnUp,this.directionRight);
       }else if(!this.playerTurnUp&&!this.straightShoot&&this.directionRight){
