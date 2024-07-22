@@ -64,7 +64,7 @@ export default class FoeGenerator{
 
     
     }
-    starXPlace = 1200;
+    starXPlace = 1500;
     star(){
       for(var i = 0;i<15 ; i++){
         const star = new Star(this.scene,this.starXPlace, Phaser.Math.Between(200, 500), "star", 0, 0);

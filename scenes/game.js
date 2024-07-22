@@ -46,7 +46,7 @@ export default class Game extends Phaser.Scene {
         this.height = this.sys.game.config.height;
         this.center_width = this.width / 2;
         this.center_height = this.height / 2;
-       // this.cameras.main.setBackgroundColor(0x000000);
+        // this.cameras.main.setBackgroundColor(0x000000);
         //this.add.tileSprite(0, 0, 683 * 10, 768, "landscape").setOrigin(0.5);
         this.cameras.main.setBounds(0, 0, 20920 * 2, 20080 * 2);
         this.physics.world.setBounds(0, 0, 20920 * 2, 20080 * 2);
@@ -60,9 +60,8 @@ export default class Game extends Phaser.Scene {
         this.addFlares();
         this.addScores();
         this.addBlackHoles();
-    
         this.addFlareRewards();
-        this.cameras.main.startFollow(this.player, true, 0.05, 0.05,0, 240);
+        this.cameras.main.startFollow(this.player, true, 0.05, 0.05, 0, 240);
         this.physics.world.enable([this.player]);
 
         this.generator = new Generator(this);
@@ -113,7 +112,7 @@ export default class Game extends Phaser.Scene {
         this.foes = new FoeGenerator(this);
     }
 
-    addBlackHoles(){
+    addBlackHoles() {
         this.blackHoleGroup = this.add.group();
     }
 
@@ -130,7 +129,7 @@ export default class Game extends Phaser.Scene {
         this.flareGroup = this.add.group();
     }
 
-    addFlareRewards(){
+    addFlareRewards() {
         this.rewardGroup = this.add.group();
     }
 
@@ -139,7 +138,7 @@ export default class Game extends Phaser.Scene {
         if (this.playerDead) return;
         this.recyclePlatform();
         this.player.update();
-        
+
 
 
     }
@@ -176,7 +175,7 @@ export default class Game extends Phaser.Scene {
 
 
     addColliders() {
-    
+
 
         //Player crash platform
         this.physics.add.collider(
@@ -255,7 +254,7 @@ export default class Game extends Phaser.Scene {
             this
         );
 
-      
+
         //Player Shot hit platform
         this.physics.add.overlap(
             this.shots,
@@ -312,16 +311,16 @@ export default class Game extends Phaser.Scene {
             this.shotStarSuccessfull(shot, foe);
 
         } else if (foe.name === 'bigtank') {
-           
+
             this.shotBigTanksuccesfull(shot, foe);
         }
     }
 
     shotStarSuccessfull(shot, foe) {
-      
+
         foe.explode();
         shot.destroy();
-        this.updateScore("player",foe.points);
+        this.updateScore("player", foe.points);
 
     }
 
@@ -338,10 +337,10 @@ export default class Game extends Phaser.Scene {
     }
 
     playerExplode() {
-      
+
         this.player.explode();
         this.playerDead = true;
-      
+
     }
     playerMissileExplode(player, bigtank_missile) {
         this.player.explode();
@@ -353,14 +352,14 @@ export default class Game extends Phaser.Scene {
         if (foe.name === 'star') {
             foe.explode();
             bigtank_missile.explode();
-           
+
         }
 
     }
 
-    getReward(player,reward){
-        if(reward.name==="flarereward"){
-          
+    getReward(player, reward) {
+        if (reward.name === "flarereward") {
+
             reward.getFlareReward();
             player.getFlareReward();
         }
@@ -375,11 +374,11 @@ export default class Game extends Phaser.Scene {
         foe.destroy();
     }
 
-  shootBlackHoleSuccesful(shot){
+    shootBlackHoleSuccesful(shot) {
         shot.destroy();
     }
 
-   
+
 
     addScores() {
         this.scores = {
@@ -400,8 +399,8 @@ export default class Game extends Phaser.Scene {
         this.tweens.add({
             targets: this.scores["player"]["scoreText"],
             duration: 200,
-            tint: {from: 0x000ff, to: 0xffffff},
-            scale: {from: 1.2, to: 1},
+            tint: { from: 0x000ff, to: 0xffffff },
+            scale: { from: 1.2, to: 1 },
             repeat: 2,
         });
     }
