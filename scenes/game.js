@@ -139,6 +139,7 @@ export default class Game extends Phaser.Scene {
         if (this.playerDead) return;
         this.recyclePlatform();
         this.player.update();
+        
 
 
     }

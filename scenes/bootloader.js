@@ -82,6 +82,10 @@ export default class Bootloader extends Phaser.Scene {
             frameWidth: 16,
             frameHeight: 16,
         });
+        this.load.spritesheet("destroyer", "assets/images/destroyer.png", {
+            frameWidth: 256,
+            frameHeight: 40,
+        });
 
         this.load.bitmapFont(
             "wendy",

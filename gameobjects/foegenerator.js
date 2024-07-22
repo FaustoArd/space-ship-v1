@@ -1,6 +1,7 @@
 import Star from "./star";
 import BigTank from "./bigtank";
 import FlareReward from './rewards';
+import Destroyer from "./destroyer";
 
 export default class FoeGenerator{
     constructor(scene){
@@ -9,6 +10,7 @@ export default class FoeGenerator{
         this.generateStars();
         this.generateBigTanks();
         this.generateFlareRewards();
+        this.generateDestroyer();
         this.activeWave = false;
         this.waves = 0;
       
@@ -38,8 +40,19 @@ export default class FoeGenerator{
         callback:() => this.flareReward(),
         callbackScope: this,
         loop:false,
-      })
+      });
     }
+
+    generateDestroyer(){
+      this.generateEvent4 = this.scene.time.addEvent({
+        delay:0,
+        callback:()=> this.destroyer(),
+        callbackScope: this,
+        loop:false,
+      });
+    }
+
+    
 
     bigTankXPlace= 1500;
     bigTank(){
@@ -56,12 +69,18 @@ export default class FoeGenerator{
       for(var i = 0;i<15 ; i++){
         const star = new Star(this.scene,this.starXPlace, Phaser.Math.Between(200, 500), "star", 0, 0);
         this.scene.foeGroup.add(star );
-        this.starXPlace += 600
+        this.starXPlace += Phaser.Math.Between(300, 600)
       }
 }
+
+destroyer(){
+  const destroyer = new Destroyer(this.scene,10000,300);
+    this.scene.foeGroup.add(destroyer);
+}
+
 flareReward(){
   for(var i = 0;i<10; i++){
-    const flareReward = new FlareReward(this.scene,Phaser.Math.Between(2000,15000), Phaser.Math.Between(200,530));
+    const flareReward = new FlareReward(this.scene,Phaser.Math.Between(2000,10000), Phaser.Math.Between(200,530));
     this.scene.rewardGroup.add(flareReward);
   }
 }
