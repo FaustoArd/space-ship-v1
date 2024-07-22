@@ -6,49 +6,25 @@ export default class Bootloader extends Phaser.Scene {
 
     preload() {
         this.createBars();
+        this.setLoadEvents();
+        this.loadFonts();
         this.loadImages();
+        this.loadAudios();
         this.loadSpriteSheets();
-   
-          this.loadAudios();
+        this.setRegistry();
+        
 
 
-        this.load.on(
-            "progress",
-            function (value) {
-                this.progressBar.clear();
-                this.progressBar.fillStyle(0xf0937, 1);
-                this.progressBar.fillRect(
-                    this.cameras.main.width / 4,
-                    this.cameras.main.height / 2 - 16,
-                    (this.cameras.main.width / 2) * value,
-                    16
-                );
-            },
-            this
-        );
-
-        this.load.on(
-            "complete",
-            () => {
-                this.scene.start("splash");
-            },
-            this
-        );
+      
 
     
    
-        this.registry.set("score", 0);
+        
 
       
-        this.load.bitmapFont(
-            "wendy",
-            "assets/fonts/wendy.png",
-            "assets/fonts/wendy.xml"
+       
 
-        );
       
-
-        this.setRegistry();
 
 
       
@@ -57,6 +33,16 @@ export default class Bootloader extends Phaser.Scene {
     loadImages(){
         this.load.image("landscape", "assets/images/landscape.png");
         this.load.image("platform", "assets/images/platform1.png");
+    }
+
+    loadFonts(){
+        this.load.bitmapFont(
+            "wendy",
+            "assets/fonts/wendy.png",
+            "assets/fonts/wendy.xml"
+
+        );
+      
     }
 
     loadSpriteSheets(){
@@ -112,18 +98,44 @@ export default class Bootloader extends Phaser.Scene {
 
     }
 
+    setLoadEvents(){
+        this.load.on(
+            "progress",
+            function (value) {
+                this.progressBar.clear();
+                this.progressBar.fillStyle(0xf0937, 1);
+                this.progressBar.fillRect(
+                    this.cameras.main.width / 4,
+                    this.cameras.main.height / 2 - 16,
+                    (this.cameras.main.width / 2) * value,
+                    16
+                );
+            },
+            this
+        );
+
+        this.load.on(
+            "complete",
+            () => {
+                this.scene.start("splash");
+            },
+            this
+        );
+    }
+
     loadAudios(){
-          //  this.load.audio("explosion1", "assets/sounds/explosion1.mp3");
-        //  this.load.audio("explosion2", "assets/sounds/explosion2.mp3");
-        //  this.load.audio("explosion3", "assets/sounds/explosion3.mp3");
-        //   this.load.audio("shot1", "assets/sounds/shot1.mp3");
-        //   this.load.audio("flare1", "assets/sounds/flare1.mp3");
-        //   this.load.audio("missilelaunch1", "assets/sounds/missilelaunch1.mp3");
-        this.load.audio("coin", "assets/sounds/coin.mp3");
+            this.load.audio("explosion1", "assets/sounds/explosion1.mp3");
+          this.load.audio("explosion2", "assets/sounds/explosion2.mp3");
+         this.load.audio("explosion3", "assets/sounds/explosion3.mp3");
+          this.load.audio("shot1", "assets/sounds/shot.mp3");
+           this.load.audio("flare1", "assets/sounds/flare1.mp3");
+           this.load.audio("missilelaunch1", "assets/sounds/missilelaunch1.mp3");
+      
     }
 
     setRegistry(){
         this.registry.set("score_player", 0);
+       // this.registry.set("score", 0);
        // this.registry.set("gravity",0);
     }
 

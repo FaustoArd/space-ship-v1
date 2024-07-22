@@ -248,6 +248,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     fireFlare(){
+        this.scene.playAudio("flare");
         let radius = 60;
         let explosionRad = 100;
        
@@ -273,7 +274,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     getFlareReward(){
-        this.flaresLeft = 5;
+        this.flaresLeft += 5;
     }
 
     getPlayerX() {

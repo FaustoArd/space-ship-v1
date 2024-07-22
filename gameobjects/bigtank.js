@@ -95,6 +95,7 @@ export default class BigTank extends Phaser.Physics.Arcade.Sprite {
         if(this.bigTankMissile){
            this.bigTankMissile.update(this.scene,this,player);
         }else{
+            this.scene.playAudio("foemissile")
             this.bigTankMissile  =  new BigTankMissile(this.scene,this.x-10,this.y-50,"bigtank_missile");
             this.scene.bigTankMissileGroup.add(this.bigTankMissile);
         }

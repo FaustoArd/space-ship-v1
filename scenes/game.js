@@ -61,7 +61,7 @@ export default class Game extends Phaser.Scene {
         this.addScores();
         this.addBlackHoles();
         this.addFlareRewards();
-       // this.loadAudios();
+        this.loadAudios();
         this.cameras.main.startFollow(this.player, true, 0.05, 0.05, 0, 240);
         this.physics.world.enable([this.player]);
 
@@ -151,10 +151,16 @@ export default class Game extends Phaser.Scene {
             explosion:this.sound.add("explosion3"),
             starexplosion:this.sound.add("explosion1"),
             bigtankexplosion:this.sound.add("explosion2"),
-            foemissile:this.sound.add("missilelaunch1")
+            foemissile:this.sound.add("missilelaunch1"),
+            flare:this.sound.add("flare1"),
 
         };
     }
+
+    playAudio(key) {
+        this.audios[key].play();
+      }
+
     recyclePlatform() {
         let minDistance = this.width;
         this.platformGroup.getChildren().forEach(function (platform) {
@@ -348,6 +354,7 @@ export default class Game extends Phaser.Scene {
 
     flareMissileExplode(bigtank_missile, flare) {
         bigtank_missile.explode();
+        this.playAudio("bigtankexplosion");
         
     }
 
