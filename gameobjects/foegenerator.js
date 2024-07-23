@@ -47,10 +47,10 @@ export default class FoeGenerator{
 
    generateEnemyShips(){
     this.generateEvent4 = this.scene.time.addEvent({
-      delay:3000,
+      delay:1000,
       callback: ()=> this.enemyWave(),
       callbackScope: this,
-      loop:2,
+      loop:0,
     });
     }
 
@@ -127,23 +127,24 @@ addToWave(i) {
 createPath() {
   this.waves++;
   if (this.waves === 3) this.finishScene();
-  const start = Phaser.Math.Between(100, 600);
+  const start = 3000;
   this.path = new Phaser.Curves.Path(start, 0);
 
-  this.path.lineTo(start, Phaser.Math.Between(20, 50));
+  this.path.lineTo(start,-600);
 
-  let max = 8;
-  let h = 500 / max;
+  let max = 2;
+  let h = 4000 / max;
 
-  for (let i = 0; i < max; i++) {
-    if (i % 2 === 0) {
-      this.path.lineTo(start, 50 + h * (i + 1));
-    } else {
-      this.path.lineTo(start + 300, 50 + h * (i + 1));
-    }
-  }
+   for (let i = 0; i < max; i++) {
+     if (i % 2 === 0) {
+      
+       this.path.lineTo(start, -50 + h * (i + 1));
+     } else {
+       this.path.lineTo(start -3000, 50 + h * (i + 1));
+     }
+   }
 
-  this.path.lineTo(start, this.scene.height + 50);
+ // this.path.lineTo(start, this.scene.height + 50);
   this.graphics = this.scene.add.graphics();
   this.graphics.lineStyle(0, 0xffffff, 0); // for debug
 }
@@ -169,6 +170,7 @@ createPath() {
     
 
       update(bigTankEnabled,player) {
+        console.log("playerx",player.x);
         if(this.path){
           this.path.draw(this.graphics);
         }
@@ -177,8 +179,8 @@ createPath() {
           let t = foe.z;
           let vec = foe.getData("vector");
           this.path.getPoint(t, vec);
-          foe.setPosition(vec.x, vec.y);
-          //foe.shadow.setPosition(vec.x + 20, vec.y + 20);
+          foe.setPosition(vec.x, 300);
+          //foe.shadow.setPosition(vec.x - 20, vec.y + 20);
           foe.setDepth(foe.y);
         });
 

@@ -26,8 +26,8 @@ export default class EnemyShip extends Phaser.Physics.Arcade.Sprite{
         this.scene.anims.create({
             key: "enemyship",
             frames: this.scene.anims.generateFrameNumbers("enemyship", {
-                start: 0,
-                end: 0,
+                start: 1,
+                end: 1,
             }),
             frameRate: 5,
             repeat: -1

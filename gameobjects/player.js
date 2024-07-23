@@ -31,7 +31,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
             Phaser.Input.Keyboard.KeyCodes.DOWN
         );
         this.right = true;
-        this.body.setGravity(0);
+        this.body.setGravity(50);
         this.body.setSize(42, 24);
         this.init();
         this.jumping = false;
@@ -43,13 +43,14 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this.health = health;
         this.dead = false;
         this.body.setCollideWorldBounds(true);
-        this.body.setAllowGravity(true);
+        this.body.setAllowGravity(false);
         this.ShootingPatterns = new ShootingPatterns(this.scene, 'player1')
         this.W = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         this.A = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         this.S = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
         this.D = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         this.C = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.C);
+        this.Z = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
         this.RIGHTUP = this.scene.input.keyboard.addKeys(Phaser.Input.Keyboard.KeyCodes.RIGHT,Phaser.Input.Keyboard.KeyCodes.UP)
         this.cursors = this.scene.input.keyboard.createCursorKeys();
       
@@ -242,6 +243,21 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
             this.fireFlare();
             this.flaresLeft -=1;
         }
+        if(this.Z.isDown){
+            this.body.setVelocityX(this.walkVelocity*2);
+        }
+       
+        //  if(this.y >= 360){
+        //     console.log(">=360",this.y);
+
+        //     this.body.setAllowGravity(true);
+        //     console.log("GRAVITY!!!!")
+           
+        //  }else if(this.y <=360) {
+          
+        //     this.body.setAllowGravity(false);
+        //  }
+
 
 
        
