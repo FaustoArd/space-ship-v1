@@ -94,6 +94,10 @@ export default class Bootloader extends Phaser.Scene {
             frameWidth: 256,
             frameHeight: 40,
         });
+        this.load.spritesheet("enemyship", "assets/images/enemy1.png", {
+            frameWidth: 32,
+            frameHeight: 16,
+        });
 
 
     }

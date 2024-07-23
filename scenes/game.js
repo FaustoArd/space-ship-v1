@@ -80,7 +80,7 @@ export default class Game extends Phaser.Scene {
         });
         this.addPlatform(20000, this.width);
         this.addColliders();
-        this.playGameMusic();
+       // this.playGameMusic();
 
     }
     addPlatform(platformWidth, posX) {
@@ -120,6 +120,8 @@ export default class Game extends Phaser.Scene {
     addShots() {
         this.shotsLayer = this.add.layer();
         this.shots = this.add.group();
+        this.foeShots= this.add.group();
+        this.foeWaveGroup = this.add.group();
     }
 
     addBigTankMissiles() {
@@ -139,6 +141,7 @@ export default class Game extends Phaser.Scene {
         if (this.playerDead) return;
         this.recyclePlatform();
         this.player.update();
+        //this.foes.update();
 
 
 
