@@ -141,6 +141,7 @@ export default class Game extends Phaser.Scene {
         if (this.playerDead) return;
         this.recyclePlatform();
         this.player.update();
+        
         //this.foes.update();
 
 
@@ -322,6 +323,40 @@ export default class Game extends Phaser.Scene {
             },
             this
         );
+          //Player shot by enemyship
+          this.physics.add.overlap(
+            this.player,
+            this.foeShots,
+            this.playerExplodeByEnemyShot,
+
+            () => {
+                return true;
+            },
+            this
+        );
+
+          //Player crash whith enemyship
+          this.physics.add.overlap(
+            this.player,
+            this.foeWaveGroup,
+            this.playerExplodeByEnemyShot,
+
+            () => {
+                return true;
+            },
+            this
+        );
+          //Player shot hit enemyship
+          this.physics.add.overlap(
+            this.shots,
+            this.foeWaveGroup,
+            this.playerShotHitEnemySHip,
+
+            () => {
+                return true;
+            },
+            this
+        );
 
 
         this.physics.world.on("worldbounds", this.onWorldBounds);
@@ -368,6 +403,24 @@ export default class Game extends Phaser.Scene {
         this.playAudio("explosion");
 
     }
+    playerExplodeByEnemyShot(player,foeShot){
+        this.player.explode();
+        this.playerDead = true;
+        this.playAudio("explosion");
+        foeShot.destroy();
+    }
+
+    playerCrashWithEnemyShip(player,foe){
+        this.player.explode();
+        this.playerDead = true;
+        this.playAudio("explosion");
+        foe.explode();
+    }
+    playerShotHitEnemySHip(shot,foe){
+        shot.destroy();
+        foe.explode();
+    }
+
     playerMissileExplode(player, bigtank_missile) {
         this.player.explode();
         this.playerDead = true;

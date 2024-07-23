@@ -147,6 +147,11 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this.leftUp= false;
         this.leftDown=false;
         this.bigTankEnabled =  this.scene.foes.update(this.bigTankEnabled,this);
+        this.scene.shots.children.entries.forEach((shot)=>{
+            if(this.x+600<shot.x||this.x-600>shot.x){
+                shot.destroy();
+            }
+        })
         //RIGHT
         if(this.cursors.right.isDown){
             this.straightShoot =true;
@@ -323,10 +328,10 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
     }
 
-    destroy() {
+    destroyPlayer() {
         this.dead = true;
         this.body.enable = false;
-       
+       this.destroy();
        
        
     }
@@ -350,7 +355,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this.anims.play("playerexplosion", true);
         new Explosion(this.scene, this.x, this.y, explosionRad);
        
-        this.destroy();
+        this.destroyPlayer();
 
 
     }

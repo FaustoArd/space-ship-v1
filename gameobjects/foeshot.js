@@ -1,7 +1,7 @@
 const TYPES= {
-    normal:{color: 0x0000cc, radius: 16, intensity: 0.4  }
+    normal:{color: 0xfff01f, radius: 4, intensity: 0.4  }
 
-}
+};
 
 export default class FoeShot extends Phaser.GameObjects.PointLight{
     constructor(scene,x,y, type="normal", playerName, velocityX = -300, velocityY = 0){
@@ -37,7 +37,7 @@ export default class FoeShot extends Phaser.GameObjects.PointLight{
         this.showPoints(50);
         this.scene.tweens.add({
           targets: explosion,
-          radius: { from: 5, to: 20 },
+          radius: { from: 1, to: 5 },
           alpha: { from: 1, to: 0 },
           duration: 250,
           onComplete: () => {

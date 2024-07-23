@@ -48,7 +48,7 @@ export default class FoeGenerator{
    generateEnemyShips(){
     this.generateEvent4 = this.scene.time.addEvent({
       delay:1000,
-      callback: ()=> this.enemyWave(),
+      callback: ()=> this.createEnemy(),
       callbackScope: this,
       loop:0,
     });
@@ -97,57 +97,67 @@ flareReward(){
   }
 }
 
-enemyWave(){
-  this.createPath();
-  const x =1500; //Phaser.Math.Between(64, this.scene.width -200);
-  const y =300 //Phaser.Math.Between(-1,1) > 0 ? 1 : -1;
-  Array(3).fill().forEach((_,i) => this.addToWave(i));
-  this.activeWave = true;
+eneyShipStartPlace=  1300;
+createEnemy(){
+  for(var i=0;i<10;i++){
+    const enemyShip = new EnemyShip(this.scene,this.eneyShipStartPlace,150);
+    this.scene.foeWaveGroup.add(enemyShip);
+    this.eneyShipStartPlace += 500;
+  }
+ 
 }
 
-addToWave(i) {
-  const foe = new EnemyShip(
-    this.scene,
-    Phaser.Math.Between(2000, 3000),
-    300,
-    "enemyship"
-  );
-  this.scene.tweens.add({
-    targets: foe,
-    z: 1,
-    ease: "Linear",
-    duration: 12000,
-    repeat: 3,
-    delay: i * 100,
-  });
-  this;
-  this.scene.foeWaveGroup.add(foe);
-}
+// enemyWave(){
+//   this.createPath();
+//   const x =1500; //Phaser.Math.Between(64, this.scene.width -200);
+//   const y =300 //Phaser.Math.Between(-1,1) > 0 ? 1 : -1;
+//   Array(3).fill().forEach((_,i) => this.addToWave(i));
+//   this.activeWave = true;
+// }
 
-createPath() {
-  this.waves++;
-  if (this.waves === 3) this.finishScene();
-  const start = 3000;
-  this.path = new Phaser.Curves.Path(start, 0);
+// addToWave(i) {
+//   const foe = new EnemyShip(
+//     this.scene,
+//     Phaser.Math.Between(2000, 3000),
+//     300,
+//     "enemyship"
+//   );
+//   this.scene.tweens.add({
+//     targets: foe,
+//     z: 1,
+//     ease: "Linear",
+//     duration: 12000,
+//     repeat: 3,
+//     delay: i * 100,
+//   });
+//   this;
+//   this.scene.foeWaveGroup.add(foe);
+// }
 
-  this.path.lineTo(start,-600);
+// createPath() {
+//   this.waves++;
+//   if (this.waves === 3) this.finishScene();
+//   const start = 3000;
+//   this.path = new Phaser.Curves.Path(start, 0);
 
-  let max = 2;
-  let h = 4000 / max;
+//   this.path.lineTo(start,-600);
 
-   for (let i = 0; i < max; i++) {
-     if (i % 2 === 0) {
+//   let max = 2;
+//   let h = 4000 / max;
+
+//    for (let i = 0; i < max; i++) {
+//      if (i % 2 === 0) {
       
-       this.path.lineTo(start, -50 + h * (i + 1));
-     } else {
-       this.path.lineTo(start -3000, 50 + h * (i + 1));
-     }
-   }
+//        this.path.lineTo(start, -50 + h * (i + 1));
+//      } else {
+//        this.path.lineTo(start -3000, 50 + h * (i + 1));
+//      }
+//    }
 
- // this.path.lineTo(start, this.scene.height + 50);
-  this.graphics = this.scene.add.graphics();
-  this.graphics.lineStyle(0, 0xffffff, 0); // for debug
-}
+//  // this.path.lineTo(start, this.scene.height + 50);
+//   this.graphics = this.scene.add.graphics();
+//   this.graphics.lineStyle(0, 0xffffff, 0); // for debug
+// }
 
 
     add() {
@@ -170,19 +180,19 @@ createPath() {
     
 
       update(bigTankEnabled,player) {
-        console.log("playerx",player.x);
-        if(this.path){
-          this.path.draw(this.graphics);
-        }
-        this.scene.foeWaveGroup.children.entries.forEach((foe) => {
-          if (foe === null || !foe.active) return;
-          let t = foe.z;
-          let vec = foe.getData("vector");
-          this.path.getPoint(t, vec);
-          foe.setPosition(vec.x, 300);
-          //foe.shadow.setPosition(vec.x - 20, vec.y + 20);
-          foe.setDepth(foe.y);
-        });
+        // console.log("playerx",player.x);
+        // if(this.path){
+        //   this.path.draw(this.graphics);
+        // }
+        // this.scene.foeWaveGroup.children.entries.forEach((foe) => {
+        //   if (foe === null || !foe.active) return;
+        //   let t = foe.z;
+        //   let vec = foe.getData("vector");
+        //   this.path.getPoint(t, vec);
+        //   foe.setPosition(vec.x, 300);
+        //   //foe.shadow.setPosition(vec.x - 20, vec.y + 20);
+        //   foe.setDepth(foe.y);
+        // });
 
           this.scene.foeGroup.children.entries.forEach((foe) =>{
            if(foe.name==="star"){
@@ -192,6 +202,10 @@ createPath() {
            return foe.update(bigTankEnabled,player);
            }
 
+          });
+
+          this.scene.foeWaveGroup.children.entries.forEach((foe)=>{
+            foe.update();
           });
 
 
