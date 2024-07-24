@@ -43,7 +43,7 @@ export default class EnemyShip extends Phaser.Physics.Arcade.Sprite {
     update() {
       
             if (this.scene.player.x - this.x > 100) {
-                this.generateShot();
+               // this.generateShot();
             }
             this.scene.physics.moveTo(
                 this,
@@ -54,7 +54,7 @@ export default class EnemyShip extends Phaser.Physics.Arcade.Sprite {
             if (this.scene.player.x - this.x <= 450 && !this.shotCompleted) {
 
 
-                this.generateShot();
+                //this.generateShot();
 
             }
             if (this.flag == 10) {

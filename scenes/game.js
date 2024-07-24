@@ -393,6 +393,7 @@ export default class Game extends Phaser.Scene {
     flareMissileExplode(bigtank_missile, flare) {
         bigtank_missile.explode();
         this.playAudio("bigtankexplosion");
+        flare.destroy();
         
     }
 

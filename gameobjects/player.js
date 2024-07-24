@@ -39,6 +39,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this.falling = false;
         this.mjolnir = false;
         this.walkVelocity = 150;
+        this.superSpeed = 400;
+        this.superSpeedAvailable = 50;
         this.invincible = false;
         this.health = health;
         this.dead = false;
@@ -182,6 +184,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
             this.directionRight = true;
             this.anims.play("playerdown", true);
             this.y += 1.8;
+            this.body.setVelocityX(this.walkVelocity);
             //DOWN, DIRECTION LEFT
         }else if(this.cursors.down.isDown&&!this.directionRight){
             this.straightShoot =false;
@@ -197,6 +200,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
             this.directionRight = false;
             this.anims.play("playerupleft", true);
             this.y -= 1.8;
+            this.body.setVelocityX(-this.walkVelocity);
         }
         //RIGHT-UP
         if(this.cursors.up.isDown&&this.directionRight){
@@ -216,6 +220,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
             this.playerTurnUp = true;
             this.anims.play("playerupleft", true);
             this.y -= 1.8;
+            this.body.setVelocityX(-this.walkVelocity);
         }
         //RIGHT-DOWN
         if(this.cursors.down.isDown&&this.directionRight){
@@ -225,6 +230,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
             this.playerTurnUp = false;
             this.anims.play("playerdown", true);
             this.y += 1.8;
+            this.body.setVelocityX(this.walkVelocity);
         }
         //LEFT-DOWN
         if(this.cursors.down.isDown&&!this.directionRight){
@@ -234,6 +240,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
             this.playerTurnUp = false;
             this.anims.play("playerdownleft", true);
             this.y += 1.8;
+            this.body.setVelocityX(-this.walkVelocity);
           
         }
 
@@ -248,9 +255,18 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
             this.fireFlare();
             this.flaresLeft -=1;
         }
-        if(this.Z.isDown){
-            this.body.setVelocityX(this.walkVelocity*2);
-        }
+        if(this.Z.isDown&&this.superSpeedAvailable>0){
+            if(this.directionRight){
+                this.body.setVelocityX(this.superSpeed);
+                this.setVelocityTimeOut(this.walkVelocity);
+            }else{
+                this.body.setVelocityX(-this.superSpeed);
+                this.setVelocityTimeOut(-this.walkVelocity);
+            }
+           
+       
+            }
+            console.log("SPA" +this.superSpeedAvailable)
        
         //  if(this.y >= 360){
         //     console.log(">=360",this.y);
@@ -266,6 +282,12 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
 
        
+    }
+    setVelocityTimeOut(velocityX){
+        setTimeout(() =>{
+            this.body.setVelocityX(velocityX);
+        },800)
+        this.superSpeedAvailable--;
     }
 
     fireFlare(){
