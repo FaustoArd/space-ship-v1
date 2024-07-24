@@ -1,6 +1,7 @@
 import ShootingPatterns from '../gameobjects/shootingpatterns';
 import Explosion from "./explosion";
 import Flare from "./flare";
+import Shot from './shot';
 
 
 export default class Player extends Phaser.Physics.Arcade.Sprite {
@@ -31,7 +32,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
             Phaser.Input.Keyboard.KeyCodes.DOWN
         );
         this.right = true;
-        this.body.setGravity(50);
+        //this.body.setGravity(0);
         this.body.setSize(42, 24);
         this.init();
         this.jumping = false;
@@ -45,7 +46,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this.health = health;
         this.dead = false;
         this.body.setCollideWorldBounds(true);
-        this.body.setAllowGravity(false);
+        this.body.setAllowGravity(true);
         this.ShootingPatterns = new ShootingPatterns(this.scene, 'player1')
         this.W = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         this.A = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
@@ -142,8 +143,16 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         });
 
     }
-
+    gravityEnabled= false;
     update() {
+        this.smokeTail(this.directionRight);
+        console.log(this.gravityEnabled)
+        if(this.y>450){
+           this.gravityEnabled = true;
+           this.showGravity("G")
+        }else{
+           this.gravityEnabled = false;
+        }
         this.rightUp = false;
         this.rightDown = false;
         this.leftUp= false;
@@ -266,18 +275,14 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
            
        
             }
-            console.log("SPA" +this.superSpeedAvailable)
-       
-        //  if(this.y >= 360){
-        //     console.log(">=360",this.y);
 
-        //     this.body.setAllowGravity(true);
-        //     console.log("GRAVITY!!!!")
            
-        //  }else if(this.y <=360) {
-          
-        //     this.body.setAllowGravity(false);
-        //  }
+       
+       if(this.gravityEnabled){
+       this.setVelocityY(+150)
+       }else{
+        this.setVelocityY(0);
+       }
 
 
 
@@ -381,5 +386,50 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
 
     }
+
+    showGravity(score, color=0xff0000){
+        let text= this.scene.add.bitmapText(this.x +20, this.y -30, "wendy", "+" + score,40,color)
+        .setOrigin(1.5);
+        this.scene.tweens.add({
+            targets: text,
+            duration: 30,
+            tint: { from:0xff0000, to: 0xff0000 },
+            hold:0,
+            alpha:{from:1, to:0},
+            y: this.y-50,
+            onComplete: ()=> {
+                text.destroy;
+            }
+        });
+    }
+
+    smokeTail(playerRight){
+        if(playerRight){
+            const point = new Shot(this.scene, this.x-15, this.y-10, "laser", this.name,0,0);
+            this.addSmokeTween(point);
+        }else{
+            const point = new Shot(this.scene, this.x+15, this.y-10, "laser", this.name,0,0);
+            this.addSmokeTween(point);
+        }
+       
+      
+      
+
+    }
+    //scene, x, y, type = "laser", playerName, velocityX, velocityY
+    addSmokeTween(point){
+     
+        this.scene.tweens.add({
+            targets: point,
+            duration: 100,
+            alpha:{from:0.8, to:0.0},
+            y: {from: this.y -10, to: this.y - 10},
+             onComplete: ()=> {
+                // point.destroy;
+             }
+            });
+    }
+
+    
 
 }
