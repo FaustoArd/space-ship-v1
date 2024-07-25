@@ -71,7 +71,7 @@ export default class FoeGenerator{
          delay:6000,
          callback:()=> this.generateAsteroids(),
          callbackScope:this,
-         repeat:5,
+         repeat:10,
        })
      }
 
@@ -110,7 +110,7 @@ export default class FoeGenerator{
 //scene,x,y ,type= "asteroid", playerName, velocityX, velocityY
 
 asteroids(asteroidsXPlace){
-  const asteroid = new Asteroid(this.scene,this.asteroidsXPlace,Phaser.Math.Between(50,600),"asteroid", "player", -300,0,Phaser.Math.Between(8,15));
+  const asteroid = new Asteroid(this.scene,this.asteroidsXPlace,Phaser.Math.Between(10,590),"asteroid", "player", -300,0,Phaser.Math.Between(8,15));
   this.scene.asteroidGroup.add(asteroid);
   
 }

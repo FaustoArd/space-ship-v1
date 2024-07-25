@@ -401,7 +401,8 @@ export default class Game extends Phaser.Scene {
     }
     asteroidCrashEnemy(asteroid, foe){
         asteroid.explode();
-        if(this.player.getPlayerX()-asteroid.x<=500){
+        console.log("playerx:: ",this.player.getPlayerX()-asteroid.x);
+        if(this.player.getPlayerX()-asteroid.x<=650&&this.player.getPlayerX()-asteroid.x>=-650){
             this.playAudio("starexplosion")
         }
            

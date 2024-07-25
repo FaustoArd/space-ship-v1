@@ -57,5 +57,6 @@ export default class Asteroid extends Phaser.GameObjects.PointLight{
         });
 
         new Explosion(this.scene, this.x, this.y, explosionRad);
+        this.destroy();
       }
 }
