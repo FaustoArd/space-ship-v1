@@ -145,6 +145,7 @@ export default class Game extends Phaser.Scene {
         this.recyclePlatform();
         this.player.update();
         
+        
         //this.foes.update();
 
 
@@ -316,16 +317,16 @@ export default class Game extends Phaser.Scene {
         );
 
         //Player crash with flare
-        this.physics.add.overlap(
-            this.player,
-            this.flareGroup,
-            this.playerExplode,
+        // this.physics.add.overlap(
+        //     this.player,
+        //     this.flareGroup,
+        //     this.playerExplode,
 
-            () => {
-                return true;
-            },
-            this
-        );
+        //     () => {
+        //         return true;
+        //     },
+        //     this
+        // );
           //Player shot by enemyship
           this.physics.add.overlap(
             this.player,

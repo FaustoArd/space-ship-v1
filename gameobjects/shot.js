@@ -1,5 +1,6 @@
 const TYPES = {
     laser: {color: 0xffffff, radius: 3, intensity: 0.4 },
+    asteroid: {color: 0x716F60, radius: 3, intensity: 0.4},
 }
 
 export default class Shot extends Phaser.GameObjects.PointLight{

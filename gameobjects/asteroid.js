@@ -1,4 +1,5 @@
 import Explosion from './explosion';
+import Shot  from './shot';
 
 const TYPES = {
   asteroid: {color: 0x716F60,radius:16, intensity: 0.4 },
@@ -38,6 +39,11 @@ export default class Asteroid extends Phaser.GameObjects.PointLight{
           intensity: { from: 0.2, to: 0.4 },
           repeat: 0,
         });
+        
+      }
+
+      update(){
+      this.addSmokeTween();
       }
 
       explode(){
@@ -59,4 +65,17 @@ export default class Asteroid extends Phaser.GameObjects.PointLight{
         new Explosion(this.scene, this.x, this.y, explosionRad);
         this.destroy();
       }
+
+      addSmokeTween() {
+        const point = new Shot(this.scene, this.x - 5, this.y+1 , "asteroid", this.name, 0, 0);
+        this.scene.tweens.add({
+            targets: point,
+            duration: 300,
+            alpha: { from: 0.8, to: 0.0 },
+            y: { from: this.y + 1, to: this.y + 1 },
+            onComplete: () => {
+                // point.destroy;
+            }
+        });
+    }
 }

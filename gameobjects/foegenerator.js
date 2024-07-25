@@ -240,6 +240,10 @@ flareReward(){
           this.scene.foeWaveGroup.children.entries.forEach((foe)=>{
            this.shotEnabled =  foe.update(this.shotEnabled,player);
           });
+
+          this.scene.asteroidGroup.children.entries.forEach((asteroid)=>{
+            asteroid.update();
+          })
             }
       
 }
