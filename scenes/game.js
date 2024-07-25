@@ -65,7 +65,8 @@ export default class Game extends Phaser.Scene {
         this.cameras.main.startFollow(this.player, true, 0.05, 0.05, 0, 240);
         this.physics.world.enable([this.player]);
 
-        this.generator = new Generator(this);
+       
+       
 
         this.platformGroup = this.add.group({
             removeCallback: function (platform) {
@@ -79,6 +80,7 @@ export default class Game extends Phaser.Scene {
             }
         });
         this.addPlatform(20000, this.width);
+       // this.generator = new Generator(this);
         this.addColliders();
         this.playStartMusic();
 
@@ -137,7 +139,7 @@ export default class Game extends Phaser.Scene {
     }
 
     update() {
-
+      
         if (this.playerDead) return;
         this.recyclePlatform();
         this.player.update();
