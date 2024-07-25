@@ -24,9 +24,9 @@ export default class FoeShot extends Phaser.GameObjects.PointLight{
     init(){
         this.scene.tweens.add({
             targets: this,
-            duration:200,
+            duration:1,
             intensity: {from: 0.3, to:0.7},
-            repeat: -1,
+            repeat: 1,
         });
     }
 
@@ -39,7 +39,7 @@ export default class FoeShot extends Phaser.GameObjects.PointLight{
           targets: explosion,
           radius: { from: 1, to: 5 },
           alpha: { from: 1, to: 0 },
-          duration: 250,
+          duration: 50,
           onComplete: () => {
             explosion.destroy();
           },

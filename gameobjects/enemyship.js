@@ -1,5 +1,6 @@
 import FoeShot from './foeshot';
 import Explosion from './explosion';
+import BigTankMissile from './bigtankmissile';
 const TYPES = {
     enemyship: { points: 1000, lives: 1 },
 }
@@ -10,7 +11,9 @@ export default class EnemyShip extends Phaser.Physics.Arcade.Sprite {
         this.x = x;
         this.y = y;
         this.name = name;
-        this.points = TYPES[name].points;
+        this.dead;
+        this.bigTankMissile;
+       this.points = TYPES[name].points;
         this.lives = TYPES[name].lives;
         this.id = Math.random();
         scene.add.existing(this);
@@ -20,6 +23,7 @@ export default class EnemyShip extends Phaser.Physics.Arcade.Sprite {
         this.body.setOffset(12, 12);
         this.body.setVelocityX(velocityX);
         this.setData("vector", new Phaser.Math.Vector2());
+      
 
         this.init();
     }
@@ -40,27 +44,19 @@ export default class EnemyShip extends Phaser.Physics.Arcade.Sprite {
 
     shotCompleted = false;
     flag = 1;
-    update() {
-      
-            if (this.scene.player.x - this.x > 100) {
-               // this.generateShot();
+    update(shotEnabled,player) {
+        this.scene.physics.moveToObject(this, player, 100);
+        if(this.dead)return;
+        if (shotEnabled) {
+           return false;
+        } else {
+            if (this.x - player.x < 600&& this.x - player.x > -1 ) {
+              this.shootMissile(player);
+               return true;
             }
-            this.scene.physics.moveTo(
-                this,
-                this.scene.player.x,
-                this.scene.player.y,
-                20
-            )
-            if (this.scene.player.x - this.x <= 450 && !this.shotCompleted) {
+            return false;
 
-
-                //this.generateShot();
-
-            }
-            if (this.flag == 10) {
-                this.shotCompleted = true;
-            }
-        
+        }
 
 
 
@@ -69,19 +65,16 @@ export default class EnemyShip extends Phaser.Physics.Arcade.Sprite {
 
     generateShot() {
         this.generateEvent1 = this.scene.time.addEvent({
-            delay: 0,
+            delay: 3000,
             callback: () => this.shot(),
             callbackScope: this,
-            loop: false,
+            repeat:0,
         });
+       // this.shot();
     }
     shot() {
-
-
         let shot = new FoeShot(this.scene, this.x - 25, this.y, "normal", this.name);
         this.scene.foeShots.add(shot);
-
-
         this.scene.physics.moveTo(
             shot,
             this.scene.player.x,
@@ -90,6 +83,21 @@ export default class EnemyShip extends Phaser.Physics.Arcade.Sprite {
             500
         );
         this.flag++;
+      
+       
+    }
+    shootMissile(player){
+       
+        this.flag++;
+        if(this.bigTankMissile){
+           this.bigTankMissile.update(this.scene,this,player);
+        }else{
+            this.scene.playAudio("foemissile")
+            this.bigTankMissile  =  new BigTankMissile(this.scene,this.x-10,this.y-50,"bigtank_missile");
+            this.scene.bigTankMissileGroup.add(this.bigTankMissile);
+        }
+   
+    
     }
 
     // destroy(){
@@ -120,7 +128,7 @@ export default class EnemyShip extends Phaser.Physics.Arcade.Sprite {
         });
         this.scene.cameras.main.shake(200, 0.010);
         new Explosion(this.scene, this.x, this.y, explosionRad);
-
+        this.dead = true;
         this.destroy();
 
 

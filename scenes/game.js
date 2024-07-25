@@ -384,8 +384,23 @@ export default class Game extends Phaser.Scene {
             this
         );
 
+        this.physics.add.overlap(
+            this.shots,
+            this.asteroidGroup,
+            this.asteroidShot,
+
+            () => {
+                return true;
+            },
+            this
+        );
+
 
         this.physics.world.on("worldbounds", this.onWorldBounds);
+    }
+    asteroidShot(shot,asteroid){
+        shot.destroy();
+        asteroid.explode();
     }
 
     enemyShot(shot, foe) {
@@ -433,6 +448,7 @@ export default class Game extends Phaser.Scene {
         bigtank_missile.explode();
         this.playAudio("bigtankexplosion");
         flare.destroy();
+       // bigtank_missile.destroy();
         
     }
 

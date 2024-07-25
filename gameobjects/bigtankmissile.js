@@ -39,9 +39,10 @@ export default class BigTankMissile extends Phaser.Physics.Arcade.Sprite {
         this.rotation += 0.5;
     }
 
-    destroy() {
+    destroyMissile() {
         this.dead = true;
         this.body.enable = false;
+        
     }
 
     explode() {
@@ -61,7 +62,9 @@ export default class BigTankMissile extends Phaser.Physics.Arcade.Sprite {
             },
         });
         new Explosion(this.scene, this.x, this.y, explosionRad);
-        this.destroy();
+        this.dead = true;
+        this.body.enable = false;
+        this.destroyMissile();
         this.scene.cameras.main.shake(200,0.010);
 
 

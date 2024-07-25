@@ -49,12 +49,36 @@ export default class FoeGenerator{
 
    generateEnemyShips(){
     this.generateEvent4 = this.scene.time.addEvent({
-      delay:1000,
-      callback: ()=> this.createEnemy(),
+      delay:5000,
+      callback: ()=> this.generateEnemy(),
       callbackScope: this,
-      loop:0,
+      repeat:5,
     });
     }
+    enemyShipStartPlace=  1300;
+    generateEnemy(){
+      this.generateEvent6 = this.scene.time.addEvent({
+        delay:50,
+        callback: () => this.enemy(this.enemyShipStartPlace),
+        callbackScope: this,
+        repeat:3,
+      });
+      this.enemyShipStartPlace += 1200;
+    }
+
+   
+    enemyShipYplace = 150;
+  enemy(enemyShipStartPlace){
+  // for(var i=0;i<10;i++){
+     const enemyShip = new EnemyShip(this.scene,enemyShipStartPlace,this.enemyShipYplace);
+    this.scene.foeWaveGroup.add(enemyShip);
+     
+     this.enemyShipYplace += 100;
+   
+  
+  }
+ 
+
 
 
     generateDestroyer(){
@@ -85,6 +109,11 @@ export default class FoeGenerator{
       });
       this.asteroidsXPlace += Phaser.Math.Between(500,1000);
 }
+asteroids(asteroidsXPlace){
+  const asteroid = new Asteroid(this.scene,this.asteroidsXPlace,Phaser.Math.Between(10,590),"asteroid", "player", -300,0,Phaser.Math.Between(8,15));
+  this.scene.asteroidGroup.add(asteroid);
+  
+}
 
     
 
@@ -109,11 +138,7 @@ export default class FoeGenerator{
 
 //scene,x,y ,type= "asteroid", playerName, velocityX, velocityY
 
-asteroids(asteroidsXPlace){
-  const asteroid = new Asteroid(this.scene,this.asteroidsXPlace,Phaser.Math.Between(10,590),"asteroid", "player", -300,0,Phaser.Math.Between(8,15));
-  this.scene.asteroidGroup.add(asteroid);
-  
-}
+
 
 destroyer(){
   const destroyer = new Destroyer(this.scene,10000,300);
@@ -127,15 +152,7 @@ flareReward(){
   }
 }
 
-eneyShipStartPlace=  1300;
-createEnemy(){
-  for(var i=0;i<10;i++){
-    const enemyShip = new EnemyShip(this.scene,this.eneyShipStartPlace,150);
-    this.scene.foeWaveGroup.add(enemyShip);
-    this.eneyShipStartPlace += 500;
-  }
- 
-}
+
 
 // enemyWave(){
 //   this.createPath();
@@ -210,21 +227,8 @@ createEnemy(){
     
 
       update(bigTankEnabled,player) {
-        // console.log("playerx",player.x);
-        // if(this.path){
-        //   this.path.draw(this.graphics);
-        // }
-        // this.scene.foeWaveGroup.children.entries.forEach((foe) => {
-        //   if (foe === null || !foe.active) return;
-        //   let t = foe.z;
-        //   let vec = foe.getData("vector");
-        //   this.path.getPoint(t, vec);
-        //   foe.setPosition(vec.x, 300);
-        //   //foe.shadow.setPosition(vec.x - 20, vec.y + 20);
-        //   foe.setDepth(foe.y);
-        // });
-
-          this.scene.foeGroup.children.entries.forEach((foe) =>{
+      
+        this.scene.foeGroup.children.entries.forEach((foe) =>{
            if(foe.name==="star"){
           foe.update();
            }
@@ -233,21 +237,10 @@ createEnemy(){
            }
 
           });
-
           this.scene.foeWaveGroup.children.entries.forEach((foe)=>{
-            foe.update();
+           this.shotEnabled =  foe.update(this.shotEnabled,player);
           });
-
-
-    
-        
-        
-        // this.scene.foeGroup.children.entries.forEach((foe) => {
-        //   if (foe === null || !foe.active || foe.y > this.scene.width /2)
-        //     //foe.destroy();
-        //   foe.update();
-        // });
-      }
+            }
       
 }
   // this.scene.foeWaveGroup.children.entries.forEach((foe) => {
