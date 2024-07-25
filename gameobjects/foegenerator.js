@@ -3,6 +3,7 @@ import BigTank from "./bigtank";
 import FlareReward from './rewards';
 import Destroyer from "./destroyer";
 import EnemyShip from "./enemyship";
+import Asteroid from './asteroid';
 
 export default class FoeGenerator{
     constructor(scene){
@@ -13,6 +14,7 @@ export default class FoeGenerator{
         this.generateFlareRewards();
         this.generateDestroyer();
         this.generateEnemyShips();
+        this.generateAsteroidFields();
         this.activeWave = false;
         this.waves = 0;
       
@@ -64,6 +66,26 @@ export default class FoeGenerator{
       });
     }
 
+     generateAsteroidFields(){
+       this.generateEvent7 = this.scene.time.addEvent({
+         delay:6000,
+         callback:()=> this.generateAsteroids(),
+         callbackScope:this,
+         repeat:5,
+       })
+     }
+
+    asteroidsXPlace = 1300;
+    generateAsteroids(){
+      this.generateEvent6 = this.scene.time.addEvent({
+        delay:50,
+        callback: () => this.asteroids(this.asteroidsXPlace),
+        callbackScope: this,
+        repeat:20,
+      });
+      this.asteroidsXPlace += Phaser.Math.Between(500,1000);
+}
+
     
 
     bigTankXPlace= 1500;
@@ -83,6 +105,14 @@ export default class FoeGenerator{
         this.scene.foeGroup.add(star );
         this.starXPlace += Phaser.Math.Between(300, 600)
       }
+}
+
+//scene,x,y ,type= "asteroid", playerName, velocityX, velocityY
+
+asteroids(asteroidsXPlace){
+  const asteroid = new Asteroid(this.scene,this.asteroidsXPlace,Phaser.Math.Between(50,600),"asteroid", "player", -300,0,Phaser.Math.Between(8,15));
+  this.scene.asteroidGroup.add(asteroid);
+  
 }
 
 destroyer(){

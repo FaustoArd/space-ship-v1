@@ -33,7 +33,10 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         );
         this.right = true;
         //this.body.setGravity(0);
+
+
         this.body.setSize(42, 24);
+        this.body.setOffset(12,7)
         this.init();
         this.jumping = false;
         this.building = false;
@@ -265,6 +268,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
             this.flaresLeft -=1;
         }
         if(this.Z.isDown&&this.superSpeedAvailable>0){
+            this.y -= 5.8;
             if(this.directionRight){
                 this.body.setVelocityX(this.superSpeed);
                 this.setVelocityTimeOut(this.walkVelocity);

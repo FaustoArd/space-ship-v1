@@ -112,6 +112,7 @@ export default class Game extends Phaser.Scene {
     addFoes() {
         this.foeGroup = this.add.group();
         this.foeWaveGroup = this.add.group();
+        this.asteroidGroup = this.add.group();
         this.foes = new FoeGenerator(this);
     }
 
@@ -359,6 +360,29 @@ export default class Game extends Phaser.Scene {
             },
             this
         );
+           //Asteroid hit Player 
+           this.physics.add.overlap(
+            this.player,
+            this.asteroidGroup,
+            this.playerCrashWithAsteroid,
+
+            () => {
+                return true;
+            },
+            this
+        );
+
+        //Asteroid hit foe
+        this.physics.add.overlap(
+            this.asteroidGroup,
+            this.foeGroup,
+            this.asteroidCrashEnemy,
+
+            () => {
+                return true;
+            },
+            this
+        );
 
 
         this.physics.world.on("worldbounds", this.onWorldBounds);
@@ -374,6 +398,18 @@ export default class Game extends Phaser.Scene {
             this.shotBigTanksuccesfull(shot, foe);
             this.playAudio("bigtankexplosion");
         }
+    }
+    asteroidCrashEnemy(asteroid, foe){
+        asteroid.explode();
+        if(this.player.getPlayerX()-asteroid.x<=500){
+            this.playAudio("starexplosion")
+        }
+           
+        
+          
+      
+        
+        
     }
 
     shotStarSuccessfull(shot, foe) {
@@ -418,6 +454,12 @@ export default class Game extends Phaser.Scene {
         this.playerDead = true;
         this.playAudio("explosion");
         foe.explode();
+    }
+    playerCrashWithAsteroid(player,asteroid){
+        this.player.explode();
+        this.playerDead = true;
+        this.playAudio("explosion");
+        asteroid.explode();
     }
     playerShotHitEnemySHip(shot,foe){
         shot.destroy();
