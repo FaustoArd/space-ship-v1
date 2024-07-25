@@ -50,6 +50,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this.dead = false;
         this.body.setCollideWorldBounds(true);
         this.body.setAllowGravity(true);
+        this.blinking = false;
         this.ShootingPatterns = new ShootingPatterns(this.scene, 'player1')
         this.W = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         this.A = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);

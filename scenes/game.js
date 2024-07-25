@@ -107,7 +107,9 @@ export default class Game extends Phaser.Scene {
         this.nextPlatformDistance = Phaser.Math.Between(gameOptions.spawnRange[0], gameOptions.spawnRange[1]);
     }
     addPlayer() {
+        this.players = this.add.group();
         this.player = new Player(this, this.center_width, this.center_height, 0);
+       this.players.add(this.player);
     }
     addFoes() {
         this.foeGroup = this.add.group();
@@ -143,7 +145,7 @@ export default class Game extends Phaser.Scene {
       
         if (this.playerDead) return;
         this.recyclePlatform();
-        this.player.update();
+        if (this.player) this.player.update();
         
         
         //this.foes.update();
@@ -205,7 +207,7 @@ export default class Game extends Phaser.Scene {
 
         //Player crash platform
         this.physics.add.collider(
-            this.player,
+            this.players,
             this.platformGroup,
             this.playerExplode,
             () => {
@@ -216,7 +218,7 @@ export default class Game extends Phaser.Scene {
 
         //Player crash foe group
         this.physics.add.overlap(
-            this.player,
+            this.players,
             this.foeGroup,
             this.playerExplode,
             () => {
@@ -227,7 +229,7 @@ export default class Game extends Phaser.Scene {
 
         //Player crash black hole 
         this.physics.add.overlap(
-            this.player,
+            this.players,
             this.blackHoleGroup,
             this.playerExplode,
             () => {
@@ -238,7 +240,7 @@ export default class Game extends Phaser.Scene {
 
         //Player get reward
         this.physics.add.overlap(
-            this.player,
+            this.players,
             this.rewardGroup,
             this.getReward,
             () => {
@@ -260,7 +262,7 @@ export default class Game extends Phaser.Scene {
 
         //Player hit by missile
         this.physics.add.overlap(
-            this.player,
+            this.players,
             this.bigTankMissileGroup,
             this.playerMissileExplode,
             () => {
@@ -329,7 +331,7 @@ export default class Game extends Phaser.Scene {
         // );
           //Player shot by enemyship
           this.physics.add.overlap(
-            this.player,
+            this.players,
             this.foeShots,
             this.playerExplodeByEnemyShot,
 
@@ -341,7 +343,7 @@ export default class Game extends Phaser.Scene {
 
           //Player crash whith enemyship
           this.physics.add.overlap(
-            this.player,
+            this.players,
             this.foeWaveGroup,
             this.playerExplodeByEnemyShot,
 
@@ -453,30 +455,26 @@ export default class Game extends Phaser.Scene {
         
     }
 
-    playerExplode() {
+    playerExplode(player) {
 
-        this.player.explode();
-        this.playerDead = true;
-        this.playAudio("explosion");
+      this.explodePlayer(player);
+       
 
     }
     playerExplodeByEnemyShot(player,foeShot){
-        this.player.explode();
-        this.playerDead = true;
-        this.playAudio("explosion");
+        this.explodePlayer(player);
+      
         foeShot.destroy();
     }
 
     playerCrashWithEnemyShip(player,foe){
-        this.player.explode();
-        this.playerDead = true;
-        this.playAudio("explosion");
+        this.explodePlayer(player);
+      
         foe.explode();
     }
     playerCrashWithAsteroid(player,asteroid){
-        this.player.explode();
-        this.playerDead = true;
-        this.playAudio("explosion");
+        this.explodePlayer(player);
+       
         asteroid.explode();
     }
     playerShotHitEnemySHip(shot,foe){
@@ -485,8 +483,7 @@ export default class Game extends Phaser.Scene {
     }
 
     playerMissileExplode(player, bigtank_missile) {
-        this.player.explode();
-        this.playerDead = true;
+       this.explodePlayer(player);
         bigtank_missile.explode();
     }
 
@@ -497,6 +494,14 @@ export default class Game extends Phaser.Scene {
 
         }
 
+    }
+    explodePlayer(player){
+        this.playAudio("explosion");
+        this.players.remove(this.player);
+        player.explode();
+        this.playerDead = true;
+        this.time.delayedCall(1000, () => this.respawnPlayer(), null, this);
+     
     }
 
     getReward(player, reward) {
@@ -579,6 +584,21 @@ export default class Game extends Phaser.Scene {
           seek: 0,
           loop: true,
           delay: 0,
+        });
+      }
+
+      respawnPlayer() {
+        this.player = new Player(this, this.center_width, this.center_height);
+        this.player.blinking = true;
+        this.players.add(this.player);
+        this.tweens.add({
+          targets: this.player,
+          duration: 100,
+          alpha: { from: 0, to: 1 },
+          repeat: 10,
+          onComplete: () => {
+            this.player.blinking = false;
+          },
         });
       }
     }
